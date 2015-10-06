@@ -1,3 +1,7 @@
+Native transitions for Ionic
+
+![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
+
 ## Installation
 
 ### npm
