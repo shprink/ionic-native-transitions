@@ -3,7 +3,10 @@
 
     <head>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
         <title>{%=o.htmlWebpackPlugin.options.pkg.title %}</title>
+        <!-- cordova script (this will be a 404 during development) -->
+        <script src="cordova.js"></script>
     </head>
 
     <body ng-app="test" ng-strict-di ng-controller="MainController as main">
@@ -39,7 +42,7 @@
             <ion-view view-title="Home">
                 <ion-content class="padding">
                     <p>
-                        <a class="button icon icon-right ion-chevron-right" href="#/tab/facts">Scientific Facts</a>
+                        <a class="button icon icon-right ion-chevron-right" native-transitions native-transitions-options="main.options" href="#/tab/facts">Scientific Facts</a>
                         <a class="button icon icon-right ion-chevron-right" ng-click="openModal()">FORM</a>
                     </p>
                 </ion-content>

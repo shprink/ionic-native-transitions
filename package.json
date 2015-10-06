@@ -11,11 +11,12 @@
     "dumpprod": "webpack --progress --colors --config webpack.config.dist.min.js -p",
     "dumpTestDev": "webpack --progress --colors -d",
     "dumpTestProd": "webpack --progress --colors -p",
-    "runAndroid": "npm run dumpTestDev && cordova run android",
-    "runIosEmulator": "npm run dumpTestDev && cordova run ios",
-    "runIosDevice": "npm run dumpTestDev && cordova run ios --device",
+    "runAndroid": "npm run dumpdev && npm run dumpTestDev && cordova run android",
+    "runIosEmulator": "npm run dumpdev && npm run dumpTestDev && cordova run ios",
+    "runIosDevice": "npm run dumpdev && npm run dumpTestDev && cordova run ios --device",
     "platformAddAndroid": "cordova platform add android",
     "platformAddIOS": "cordova platform add ios",
+    "platformAddAll": "npm run platformAddAndroid && npm run platformAddIOS",
     "pluginAddAll": "cordova plugin add cordova-plugin-crosswalk-webview@1.2.0 https://github.com/Telerik-Verified-Plugins/NativePageTransitions"
   },
   "repository": {
