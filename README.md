@@ -2,6 +2,8 @@
 
 ### npm
 
+<https://www.npmjs.com/package/ionic-native-transitions>
+
 ```
 npm install ionic-native-transitions --save
 
@@ -64,7 +66,7 @@ You can use `native-transitions` and `native-transitions-options` directives.
 Using `native-transitions` alone will use the slide left animation.
 
 ```
-<a class="button" native-transitions" ui-sref="facts">Next</a>
+<a class="button" native-transitions ui-sref="facts">Next</a>
 ```
 
 ### Using scope
