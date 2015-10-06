@@ -1,6 +1,12 @@
+Native transitions for Ionic
+
+![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
+
 ## Installation
 
 ### npm
+
+<https://www.npmjs.com/package/ionic-native-transitions>
 
 ```
 npm install ionic-native-transitions --save
@@ -31,8 +37,18 @@ angular.module('yourApp', [
     });
 });
 ```
-
 For more information about options please see the documentation: <http://plugins.telerik.com/cordova/plugin/native-page-transitions>
+
+### Enable/Disable (optional)
+
+You can programatically disable the plugin for any reason for instance on Windows phone (that's just an example, Windows phone is supported):
+
+```
+if (ionic.Platform.isWindowsPhone()){
+    $ionicNativeTransitionsProvider.enable(false);
+}
+```
+
 
 ## Animations
 
@@ -64,7 +80,7 @@ You can use `native-transitions` and `native-transitions-options` directives.
 Using `native-transitions` alone will use the slide left animation.
 
 ```
-<a class="button" native-transitions" ui-sref="facts">Next</a>
+<a class="button" native-transitions ui-sref="facts">Next</a>
 ```
 
 ### Using scope
