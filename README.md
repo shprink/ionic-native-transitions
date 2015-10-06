@@ -37,8 +37,18 @@ angular.module('yourApp', [
     });
 });
 ```
-
 For more information about options please see the documentation: <http://plugins.telerik.com/cordova/plugin/native-page-transitions>
+
+### Enable/Disable (optional)
+
+You can programatically disable the plugin for any reason for instance on Windows phone (that's just an example, Windows phone is supported):
+
+```
+if (ionic.Platform.isWindowsPhone()){
+    $ionicNativeTransitionsProvider.enable(false);
+}
+```
+
 
 ## Animations
 
