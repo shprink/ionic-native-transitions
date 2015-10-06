@@ -100,7 +100,6 @@
 	    'ngInject';
 	
 	    var options = {
-	        "direction": "left", // 'left|right|up|down', default 'left' (which is like 'next')
 	        "duration": 400, // in milliseconds (ms), default 400
 	        "slowdownfactor": 4, // overlap views (higher number is more) or no overlap (1), default 4
 	        "iosdelay": 60, // ms to wait for the iOS webview to update before animation kicks in, default 60
@@ -142,7 +141,7 @@
 	    function setOptions() {
 	        var injectedOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        angular.merge(options, injectedOptions);
+	        angular.extend(options, injectedOptions);
 	        console.log(options);
 	        return this;
 	    }
@@ -167,7 +166,7 @@
 	        function init() {
 	
 	            if (window.cordova && window.plugins && window.plugins.nativepagetransitions) {
-	                angular.merge(window.plugins.nativepagetransitions.globalOptions, options);
+	                angular.extend(window.plugins.nativepagetransitions.globalOptions, options);
 	            } else {
 	                $log.info('nativepagetransitions plugin does not exist, cannot initialize.');
 	            }
@@ -197,42 +196,57 @@
 	    value: true
 	});
 	
-	exports['default'] = ["$ionicGesture", function ($ionicGesture) {
+	exports['default'] = ["$log", function ($log) {
 	    'ngInject';
 	
 	    Link.$inject = ["scope", "element", "attrs"];
 	    return {
 	        link: Link,
 	        restrict: 'A',
-	        scope: {
-	            nativeTransitionsOptions: '='
-	        }
+	        scope: false
 	    };
 	
 	    function Link(scope, element, attrs) {
 	        'ngInject';
 	
-	        // let direction = (angular.isDefined(attrs.nativeTransitionsDirection) && (attrs.nativeTransitionsDirection === 'left' || attrs.nativeTransitionsDirection === 'right' || attrs.nativeTransitionsDirection === 'up' || attrs.nativeTransitionsDirection === 'down')) ? attrs.nativeTransitionsDirection : 'left';
-	        // let type = (angular.isDefined(attrs.nativeTransitionsType) && (attrs.nativeTransitionsType === 'slide' || attrs.nativeTransitionsType === 'flip' || attrs.nativeTransitionsType === 'fade' || attrs.nativeTransitionsType === 'drawer' || attrs.nativeTransitionsType === 'curl')) ? attrs.nativeTransitionsType : 'slide';
-	        var options = scope.nativeTransitionsOptions || {
-	            type: 'slide',
-	            direction: 'left'
-	        };
-	        console.log('scope', scope);
-	        $ionicGesture.on('tap', function (e) {
-	            if (window.cordova && window.plugins && window.plugins.nativepagetransitions) {
-	                switch (type) {
-	                    case 'slide':
-	                    case 'flip':
-	                    case 'fade':
-	                    case 'curl':
-	                    case 'drawer':
-	                        window.plugins.nativepagetransitions[type].apply(this, options);
-	                        break;
+	        var options = {};
 	
+	        attrs.$observe('nativeTransitionsOptions', function (newOptions) {
+	            var evalOptions = scope.$eval(newOptions);
+	            options = angular.isObject(evalOptions) ? evalOptions : {};
+	        });
+	
+	        element.on('click', function (event) {
+	            if (window.cordova && window.plugins && window.plugins.nativepagetransitions) {
+	                var plugin = window.plugins.nativepagetransitions;
+	                switch (options.type) {
+	                    case 'flip':
+	                        window.plugins.nativepagetransitions.flip(options, success, error);
+	                        break;
+	                    case 'fade':
+	                        window.plugins.nativepagetransitions.fade(options, success, error);
+	                        break;
+	                    case 'curl':
+	                        window.plugins.nativepagetransitions.curl(options, success, error);
+	                        break;
+	                    case 'drawer':
+	                        window.plugins.nativepagetransitions.drawer(options, success, error);
+	                        break;
+	                    case 'slide':
+	                    default:
+	                        window.plugins.nativepagetransitions.slide(options, success, error);
+	                        break;
 	                }
 	            }
 	        });
+	
+	        function success(msg) {
+	            $log.info('transition success', msg);
+	        }
+	
+	        function error(msg) {
+	            $log.info('transition error', msg);
+	        }
 	    }
 	}];
 	

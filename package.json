@@ -17,7 +17,7 @@
     "platformAddAndroid": "cordova platform add android",
     "platformAddIOS": "cordova platform add ios",
     "platformAddAll": "npm run platformAddAndroid && npm run platformAddIOS",
-    "pluginAddAll": "cordova plugin add cordova-plugin-crosswalk-webview@1.2.0 https://github.com/Telerik-Verified-Plugins/NativePageTransitions"
+    "pluginAddAll": "cordova plugin add cordova-plugin-crosswalk-webview@1.2.0 https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2"
   },
   "repository": {
     "type": "git",
