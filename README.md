@@ -11,10 +11,12 @@ cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransit
 ## Configuration
 
 ```
-angular.module('youApp', [
+angular.module('yourApp', [
     'ionic-native-transitions'
 ]);
 ```
+
+### Set default options
 
 ```
 .config(function($ionicNativeTransitionsProvider){

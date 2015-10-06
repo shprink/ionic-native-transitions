@@ -127,22 +127,10 @@
 	     * Overwrite default nativepagetransitions plugin options
 	     * @param {object} injectedOptions  options that will overwrite defaults
 	     */
-	
-	    /**
-	     * @ngdoc function
-	     * @name ionic-native-transitions.$ionicNativeTransitions#setBasicCredentials
-	     * @access public
-	     * @methodOf ionic-native-transitions.$ionicNativeTransitions
-	     *
-	     * @description
-	     * Overwrite default nativepagetransitions plugin options
-	     * @param {object} injectedOptions  options that will overwrite defaults
-	     */
 	    function setOptions() {
 	        var injectedOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
 	        angular.extend(options, injectedOptions);
-	        console.log(options);
 	        return this;
 	    }
 	
@@ -150,8 +138,7 @@
 	        'ngInject';
 	
 	        return {
-	            init: init,
-	            setOptions: setOptions
+	            init: init
 	        };
 	
 	        /**
