@@ -7,6 +7,9 @@ export default function(
     'ngInject';
 
     var vm = this;
+    vm.options = {
+        direction: 'up'
+    }
 
     $log.info('setting options via controller');
 

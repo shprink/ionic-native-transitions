@@ -23,3 +23,7 @@ npm run devserver
 ```
 
 Open ```http://localhost:8080```
+
+## Thanks
+
+* GAJOTRES for his great post: <http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/>
