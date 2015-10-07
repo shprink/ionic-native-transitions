@@ -5,7 +5,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         direction: 'up'
     });
 
-    $ionicNativeTransitionsProvider.enable(false);
+    // $ionicNativeTransitionsProvider.enable(false);
 
     $ionicConfigProvider.tabs.position('top');
 
