@@ -21,7 +21,7 @@ The recommended version for the Transition plugin is 0.4.2 or higher.
 cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
 
 # Using Ionic
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
 ```
 
 ## Configuration
@@ -93,12 +93,12 @@ $scope.options = {
 ### Inline options
 
 ```
-<a class="button" native-transitions native-transitions-options="{type: 'slide', direction:'right'}" ui-sref="facts">Next</a>
+<ion-nav-back-button native-transitions native-transitions-options="{type: 'slide', direction:'right'}"></ion-nav-back-button>
 ```
 
-## Animations
+## Transitions
 
-Here is animations specific options:
+Here are transitions specific options:
 
 ### Slide (default animation)
 
