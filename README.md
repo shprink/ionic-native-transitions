@@ -93,7 +93,7 @@ $scope.options = {
 ### Inline options
 
 ```
-<a class="button" native-transitions native-transitions-options="{type: 'slide', direction:'right'}" ui-sref="facts">Next</a>
+<ion-nav-back-button native-transitions native-transitions-options="{type: 'slide', direction:'right'}"></ion-nav-back-button>
 ```
 
 ## Transitions
