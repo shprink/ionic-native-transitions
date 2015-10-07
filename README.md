@@ -10,13 +10,29 @@ Native transitions for Ionic
 
 ```
 npm install ionic-native-transitions --save
+```
 
+### Cordova/Ionic
+
+The recommended version for the Transition plugin is 0.4.2 or higher.
+
+```
+# Using Cordova
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
+
+# Using Ionic
 cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
 ```
 
 ## Configuration
 
 ```
+# ES5
+require('ionic-native-transitions');
+
+# or ES6
+import 'ionic-native-transitions';
+
 angular.module('yourApp', [
     'ionic-native-transitions'
 ]);
@@ -49,30 +65,6 @@ if (ionic.Platform.isWindowsPhone()){
 }
 ```
 
-
-## Animations
-
-Here is animations specific options:
-
-### Slide (default animation)
-
-* ***direction***: 'left|right|up|down', default 'left' (which is like 'next')
-
-### Flip
-
-* ***direction***: 'left|right|up|down', default 'right' (Android currently only supports left and right)
-
-### Fade (iOS and Android only)
-
-### Drawer (iOS and Android only)
-
-* ***origin***: 'left|right', open the drawer from this side of the view, default 'left'
-* ***action***: 'open|close', default 'open', note that close is not behaving nicely on Crosswalk
-
-### Curl (iOS only, direction up and down only)
-
-* ***direction***: 'up|down', default 'up'
-
 ## Usage
 
 You can use `native-transitions` and `native-transitions-options` directives.
@@ -103,6 +95,29 @@ $scope.options = {
 ```
 <a class="button" native-transitions native-transitions-options="{type: 'slide', direction:'right'}" ui-sref="facts">Next</a>
 ```
+
+## Animations
+
+Here is animations specific options:
+
+### Slide (default animation)
+
+* ***direction***: 'left|right|up|down', default 'left' (which is like 'next')
+
+### Flip
+
+* ***direction***: 'left|right|up|down', default 'right' (Android currently only supports left and right)
+
+### Fade (iOS and Android only)
+
+### Drawer (iOS and Android only)
+
+* ***origin***: 'left|right', open the drawer from this side of the view, default 'left'
+* ***action***: 'open|close', default 'open', note that close is not behaving nicely on Crosswalk
+
+### Curl (iOS only, direction up and down only)
+
+* ***direction***: 'up|down', default 'up'
 
 ## Contribute
 

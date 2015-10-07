@@ -69,7 +69,6 @@
 	
 	var mod = angular.module('ionic-native-transitions', ['ionic']);
 	
-	// 'ui-router'
 	mod.directive('nativeTransitions', _directiveJs2['default']);
 	mod.provider('$ionicNativeTransitions', _providerJs2['default']);
 	mod.run(_runJs2['default']);
