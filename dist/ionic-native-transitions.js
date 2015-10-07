@@ -198,6 +198,7 @@
 	        function init() {
 	            if (!enable) {
 	                $log.info('nativepagetransitions is disabled');
+	                return;
 	            }
 	            if (window.cordova && window.plugins && window.plugins.nativepagetransitions) {
 	                $ionicConfig.views.transition('none');
