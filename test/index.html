@@ -11,7 +11,7 @@
 
     <body ng-app="test" ng-strict-di ng-controller="MainController as main">
         <ion-nav-bar class="bar-positive">
-            <ion-nav-back-button class="button-icon ion-arrow-left-c">
+            <ion-nav-back-button class="button-icon ion-arrow-left-c" native-transitions native-transitions-options="{type: 'slide', direction:'right'}">
             </ion-nav-back-button>
         </ion-nav-bar>
 
@@ -42,31 +42,8 @@
             <ion-view view-title="Home">
                 <ion-content class="">
                     <p>
-                        <a class="button button-full button-large icon icon-right ion-chevron-right" native-transitions native-transitions-options="{{main.options}}" ui-sref="facts">Test transition</a>
+                        <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="facts">Test transition</a>
                     </p>
-                    <div class="list">
-                        <div class="item item-divider">
-                            Transition type
-                        </div>
-                        <select ng-model="main.options.type">
-                            <option value="slide">Slide</option>
-                            <option value="flip">Flip</option>
-                            <option value="fade">Fade (iOS and Android only)</option>
-                            <option value="curl">Curl (iOS only)</option>
-                            <option value="drawer">Drawer (iOS and Android only)</option>
-                        </select>
-                    </div>
-                    <div class="list">
-                        <div class="item item-divider">
-                            Transition direction
-                        </div>
-                        <select ng-model="main.options.direction">
-                            <option value="left">Left</option>
-                            <option value="right">Right</option>
-                            <option value="up">Up</option>
-                            <option value="down">Down</option>
-                        </select>
-                    </div>
                 </ion-content>
             </ion-view>
         </script>

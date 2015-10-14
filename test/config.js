@@ -2,7 +2,8 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
     'ngInject';
     $ionicNativeTransitionsProvider.setOptions({
         duration: 500,
-        direction: 'up'
+        type: 'slide',
+        direction: 'left'
     });
 
     // $ionicNativeTransitionsProvider.enable(false);
@@ -25,10 +26,14 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         })
         .state('facts', {
             url: "/facts",
+            nativepagetransitions: {
+                type: "flip"
+            },
             templateUrl: "templates/facts.html"
         })
         .state('tabs.about', {
             url: "/about",
+            nativepagetransitions: null,
             views: {
                 'about-tab': {
                     templateUrl: "templates/about.html"
