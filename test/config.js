@@ -1,9 +1,17 @@
 export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     'ngInject';
-    $ionicNativeTransitionsProvider.setOptions({
-        duration: 500,
+    $ionicNativeTransitionsProvider.setDefaultOptions({
+        duration: 500
+    });
+
+    $ionicNativeTransitionsProvider.setDefaultTransition({
         type: 'slide',
         direction: 'left'
+    });
+
+    $ionicNativeTransitionsProvider.setDefaultBackTransition({
+        type: 'slide',
+        direction: 'right'
     });
 
     // $ionicNativeTransitionsProvider.enable(false);
@@ -24,16 +32,55 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
                 }
             }
         })
-        .state('facts', {
-            url: "/facts",
-            nativepagetransitions: {
-                type: "flip"
+        .state('one', {
+            url: "/one",
+            nativeTransitions: {
+                "type": "flip",
+                "direction": "up"
             },
-            templateUrl: "templates/facts.html"
+            nativeTransitionsAndroid: {
+                "type": "flip",
+                "direction": "right"
+            },
+            nativeTransitionsIOS: {
+                "type": "flip",
+                "direction": "left"
+            },
+            nativeTransitionsWindowsPhone: {
+                "type": "flip",
+                "direction": "down"
+            },
+            templateUrl: "templates/one.html"
+        })
+        .state('two', {
+            url: "/two",
+            nativeTransitions: {
+                type: "fade"
+            },
+            nativeTransitionsIOS: {
+                "type": "flip",
+                "direction": "down" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
+            },
+            templateUrl: "templates/two.html"
+        })
+        .state('three', {
+            url: "/three",
+            nativeTransitions: {
+                type: "slide",
+                direction: "up"
+            },
+            templateUrl: "templates/three.html"
+        })
+        .state('four', {
+            url: "/four",
+            nativeTransitions: {
+                type: "slide"
+            },
+            templateUrl: "templates/four.html"
         })
         .state('tabs.about', {
             url: "/about",
-            nativepagetransitions: null,
+            nativeTransitions: null,
             views: {
                 'about-tab': {
                     templateUrl: "templates/about.html"

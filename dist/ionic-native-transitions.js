@@ -69,17 +69,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _providerJs2 = _interopRequireDefault(_providerJs);
 	
-	var _directiveJs = __webpack_require__(/*! ./directive.js */ 2);
+	var _nativeBackJs = __webpack_require__(/*! ./nativeBack.js */ 2);
 	
-	var _directiveJs2 = _interopRequireDefault(_directiveJs);
+	var _nativeBackJs2 = _interopRequireDefault(_nativeBackJs);
 	
-	var _runJs = __webpack_require__(/*! ./run.js */ 3);
+	var _nativeSrefJs = __webpack_require__(/*! ./nativeSref.js */ 3);
+	
+	var _nativeSrefJs2 = _interopRequireDefault(_nativeSrefJs);
+	
+	var _runJs = __webpack_require__(/*! ./run.js */ 4);
 	
 	var _runJs2 = _interopRequireDefault(_runJs);
 	
 	var mod = angular.module('ionic-native-transitions', ['ionic', 'ui.router']);
 	
-	mod.directive('nativeTransitions', _directiveJs2['default']);
+	mod.directive('nativeBack', _nativeBackJs2['default']);
+	mod.directive('nativeUiSref', _nativeSrefJs2['default']);
 	mod.provider('$ionicNativeTransitions', _providerJs2['default']);
 	mod.run(_runJs2['default']);
 	
@@ -118,22 +123,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
 	        $stateChangeError = null,
+	        backTransitionOptions = {
+	        type: 'slide',
+	        direction: 'right'
+	    },
 	        options = {
-	        "type": 'slide', // transition type
-	        "duration": 400, // in milliseconds (ms), default 400,
-	        "direction": 'left',
-	        "slowdownfactor": 4, // overlap views (higher number is more) or no overlap (1), default 4
-	        "iosdelay": -1, // ms to wait for the iOS webview to update before animation kicks in, default 60
-	        "androiddelay": -1, // same as above but for Android, default 70
-	        "winphonedelay": 200, // same as above but for Windows Phone, default 200,
-	        "fixedPixelsTop": 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
-	        "fixedPixelsBottom": 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
+	        type: 'slide', // transition type
+	        duration: 400, // in milliseconds (ms), default 400,
+	        direction: 'left',
+	        slowdownfactor: 4, // overlap views (higher number is more) or no overlap (1), default 4
+	        iosdelay: -1, // ms to wait for the iOS webview to update before animation kicks in, default 60
+	        androiddelay: -1, // same as above but for Android, default 70
+	        winphonedelay: 200, // same as above but for Windows Phone, default 200,
+	        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
+	        fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
 	    };
 	
 	    $get.$inject = ["$log", "$ionicConfig", "$rootScope"];
 	    return {
 	        $get: $get,
 	        enable: enable,
+	        setBackTransition: setBackTransition,
 	        setOptions: setOptions
 	    };
 	
@@ -196,6 +206,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 	
+	    /**
+	     * @ngdoc function
+	     * @name ionic-native-transitions.$ionicNativeTransitionsProvider#setBackTransition
+	     * @access public
+	     * @methodOf ionic-native-transitions.$ionicNativeTransitionsProvider
+	     *
+	     * @description
+	     * Overwrite default backtransitions options
+	     * @param {object} transitionOptions  options that will overwrite defaults
+	     */
+	    function setBackTransition() {
+	        var transitionOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	        angular.extend(backTransitionOptions, transitionOptions);
+	        return this;
+	    }
+	
 	    function $get($log, $ionicConfig, $rootScope) {
 	        'ngInject';
 	
@@ -210,8 +237,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	
 	        function transition() {
-	            var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
+	            var options = {};
+	            if (angular.isObject(arguments[0])) {
+	                options = arguments[0];
+	            } else if (angular.isString(arguments[0])) {
+	                switch (arguments[0]) {
+	                    case 'back':
+	                        options = backTransitionOptions;
+	                        break;
+	                }
+	            } else {
+	                $log.debug('transition function needs one argument');
+	            }
 	            var plugin = window.plugins.nativepagetransitions;
 	            switch (options.type) {
 	                case 'flip':
@@ -317,9 +354,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/*!**************************!*\
-  !*** ./lib/directive.js ***!
-  \**************************/
+/*!***************************!*\
+  !*** ./lib/nativeBack.js ***!
+  \***************************/
 /***/ function(module, exports) {
 
 	'use strict';
@@ -331,42 +368,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = ["$log", "$ionicNativeTransitions", "$ionicHistory", function ($log, $ionicNativeTransitions, $ionicHistory) {
 	    'ngInject';
 	
-	    Link.$inject = ["scope", "element", "attrs"];
+	    link.$inject = ["scope", "element", "attrs"];
 	    return {
-	        link: Link,
+	        link: link,
 	        restrict: 'A',
 	        scope: false
 	    };
 	
-	    function Link(scope, element, attrs) {
+	    function link(scope, element, attrs) {
 	        'ngInject';
 	
 	        if (!$ionicNativeTransitions.isEnabled()) {
 	            return;
 	        }
 	
-	        var options = {};
-	
-	        attrs.$observe('nativeTransitionsOptions', function (newOptions) {
-	            var evalOptions = scope.$eval(newOptions);
-	            options = angular.isObject(evalOptions) ? evalOptions : {};
-	        });
-	
 	        element.on('click', function (event) {
 	            event.preventDefault();
 	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	            $ionicNativeTransitions.transition(options);
+	            $ionicNativeTransitions.transition('back');
 	            $ionicHistory.goBack();
 	            $ionicNativeTransitions.registerToRouteEvents();
 	        });
-	
-	        function success(msg) {
-	            $log.info('transition success', msg);
-	        }
-	
-	        function error(msg) {
-	            $log.info('transition error', msg);
-	        }
 	    }
 	}];
 	
@@ -374,6 +396,61 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
+/*!***************************!*\
+  !*** ./lib/nativeSref.js ***!
+  \***************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+	
+	exports['default'] = ["$log", "$ionicNativeTransitions", "$state", function ($log, $ionicNativeTransitions, $state) {
+	    'ngInject';
+	
+	    link.$inject = ["scope", "element", "attrs"];
+	    return {
+	        link: link,
+	        restrict: 'A',
+	        scope: false
+	    };
+	
+	    function link(scope, element, attrs) {
+	        'ngInject';
+	
+	        var state = attrs.nativeUiSref;
+	        var optionsOverride = scope.$eval(attrs.nativeUiSrefOpts) || {};
+	        var options = {};
+	
+	        attrs.$observe('nativeOptions', function (newOptions) {
+	            var evalOptions = scope.$eval(newOptions);
+	            options = angular.isObject(evalOptions) ? evalOptions : {};
+	        });
+	
+	        if (!state) {
+	            return;
+	        }
+	
+	        element.on('click', function (event) {
+	            if (!$ionicNativeTransitions.isEnabled()) {
+	                $state.go(state, optionsOverride);
+	                return;
+	            }
+	
+	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
+	            $ionicNativeTransitions.transition(options);
+	            $state.go(state, optionsOverride);
+	            $ionicNativeTransitions.registerToRouteEvents();
+	        });
+	    }
+	}];
+	
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
 /*!********************!*\
   !*** ./lib/run.js ***!
   \********************/
@@ -407,10 +484,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    $ionicPlatform.onHardwareBackButton(function (event) {
 	        event.preventDefault();
 	        $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	        $ionicNativeTransitions.transition({
-	            type: 'slide',
-	            direction: 'right'
-	        });
+	        $ionicNativeTransitions.transition('back');
 	        $ionicHistory.goBack();
 	        $ionicNativeTransitions.registerToRouteEvents();
 	    });
