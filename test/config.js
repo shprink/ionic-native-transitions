@@ -5,12 +5,12 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
     });
 
     $ionicNativeTransitionsProvider.setDefaultTransition({
-        type: 'slide',
+        type: 'flip',
         direction: 'left'
     });
 
     $ionicNativeTransitionsProvider.setDefaultBackTransition({
-        type: 'slide',
+        type: 'flip',
         direction: 'right'
     });
 
@@ -26,6 +26,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         })
         .state('tabs.home', {
             url: "/home",
+            nativeTransitions: null,
             views: {
                 'home-tab': {
                     templateUrl: "templates/home.html"
@@ -66,16 +67,16 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         .state('three', {
             url: "/three",
             nativeTransitions: {
-                type: "slide",
-                direction: "up"
+                type: "fade"
+            },
+            nativeTransitionsAndroid: {
+                "type": "flip",
+                "direction": "left" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
             },
             templateUrl: "templates/three.html"
         })
         .state('four', {
             url: "/four",
-            nativeTransitions: {
-                type: "slide"
-            },
             templateUrl: "templates/four.html"
         })
         .state('tabs.about', {
@@ -89,6 +90,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         })
         .state('tabs.contact', {
             url: "/contact",
+            nativeTransitions: null,
             views: {
                 'contact-tab': {
                     templateUrl: "templates/contact.html"

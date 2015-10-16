@@ -69,21 +69,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _providerJs2 = _interopRequireDefault(_providerJs);
 	
-	var _nativeBackJs = __webpack_require__(/*! ./nativeBack.js */ 2);
-	
-	var _nativeBackJs2 = _interopRequireDefault(_nativeBackJs);
-	
-	var _nativeSrefJs = __webpack_require__(/*! ./nativeSref.js */ 3);
+	var _nativeSrefJs = __webpack_require__(/*! ./nativeSref.js */ 2);
 	
 	var _nativeSrefJs2 = _interopRequireDefault(_nativeSrefJs);
 	
-	var _runJs = __webpack_require__(/*! ./run.js */ 4);
+	var _runJs = __webpack_require__(/*! ./run.js */ 3);
 	
 	var _runJs2 = _interopRequireDefault(_runJs);
 	
 	var mod = angular.module('ionic-native-transitions', ['ionic', 'ui.router']);
 	
-	mod.directive('nativeBack', _nativeBackJs2['default']);
 	mod.directive('nativeUiSref', _nativeSrefJs2['default']);
 	mod.provider('$ionicNativeTransitions', _providerJs2['default']);
 	mod.run(_runJs2['default']);
@@ -123,18 +118,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
 	        $stateChangeError = null,
-	        backTransitionOptions = {
+	        defaultTransition = {
+	        type: 'slide',
+	        direction: 'left'
+	    },
+	        defaultBackTransition = {
 	        type: 'slide',
 	        direction: 'right'
 	    },
-	        options = {
-	        type: 'slide', // transition type
+	        defaultOptions = {
 	        duration: 400, // in milliseconds (ms), default 400,
-	        direction: 'left',
 	        slowdownfactor: 4, // overlap views (higher number is more) or no overlap (1), default 4
-	        iosdelay: -1, // ms to wait for the iOS webview to update before animation kicks in, default 60
-	        androiddelay: -1, // same as above but for Android, default 70
-	        winphonedelay: 200, // same as above but for Windows Phone, default 200,
+	        iosdelay: -1, // ms to wait for the iOS webview to update before animation kicks in, default -1
+	        androiddelay: -1, // same as above but for Android, default -1
+	        winphonedelay: -1, // same as above but for Windows Phone, default -1,
 	        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
 	        fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
 	    };
@@ -143,8 +140,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return {
 	        $get: $get,
 	        enable: enable,
-	        setBackTransition: setBackTransition,
-	        setOptions: setOptions
+	        setDefaultTransition: setDefaultTransition,
+	        setDefaultBackTransition: setDefaultBackTransition,
+	        setDefaultOptions: setDefaultOptions
 	    };
 	
 	    /**
@@ -161,6 +159,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var enabled = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 	
 	        enable = enabled;
+	        if (!enabled) {
+	            unregisterToRouteEvents();
+	        }
 	        return this;
 	    }
 	
@@ -191,7 +192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * @ngdoc function
-	     * @name ionic-native-transitions.$ionicNativeTransitionsProvider#setOptions
+	     * @name ionic-native-transitions.$ionicNativeTransitionsProvider#setDefaultOptions
 	     * @access public
 	     * @methodOf ionic-native-transitions.$ionicNativeTransitionsProvider
 	     *
@@ -199,27 +200,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Overwrite default nativepagetransitions plugin options
 	     * @param {object} injectedOptions  options that will overwrite defaults
 	     */
-	    function setOptions() {
+	    function setDefaultOptions() {
 	        var injectedOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        angular.extend(options, injectedOptions);
+	        angular.extend(defaultOptions, injectedOptions);
 	        return this;
 	    }
 	
 	    /**
 	     * @ngdoc function
-	     * @name ionic-native-transitions.$ionicNativeTransitionsProvider#setBackTransition
+	     * @name ionic-native-transitions.$ionicNativeTransitionsProvider#setDefaultTransition
 	     * @access public
 	     * @methodOf ionic-native-transitions.$ionicNativeTransitionsProvider
 	     *
 	     * @description
-	     * Overwrite default backtransitions options
+	     * Overwrite default transitions
 	     * @param {object} transitionOptions  options that will overwrite defaults
 	     */
-	    function setBackTransition() {
-	        var transitionOptions = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    function setDefaultTransition() {
+	        var transition = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 	
-	        angular.extend(backTransitionOptions, transitionOptions);
+	        angular.extend(defaultTransition, transition);
+	        return this;
+	    }
+	
+	    /**
+	     * @ngdoc function
+	     * @name ionic-native-transitions.$ionicNativeTransitionsProvider#setDefaultBackTransition
+	     * @access public
+	     * @methodOf ionic-native-transitions.$ionicNativeTransitionsProvider
+	     *
+	     * @description
+	     * Overwrite default back transitions
+	     * @param {object} transitionOptions  options that will overwrite defaults
+	     */
+	    function setDefaultBackTransition() {
+	        var transition = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	        angular.extend(defaultBackTransition, transition);
 	        return this;
 	    }
 	
@@ -228,69 +246,88 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        return {
 	            init: init,
-	            getOptions: getOptions,
+	            getDefaultOptions: getDefaultOptions,
 	            isEnabled: isEnabled,
 	            transition: transition,
 	            registerToRouteEvents: registerToRouteEvents,
 	            unregisterToRouteEvents: unregisterToRouteEvents,
+	            registerToStateChangeStartEvent: registerToStateChangeStartEvent,
 	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent
 	        };
 	
 	        function transition() {
+	            if (!isEnabled()) {
+	                return;
+	            }
 	            var options = {};
 	            if (angular.isObject(arguments[0])) {
 	                options = arguments[0];
 	            } else if (angular.isString(arguments[0])) {
 	                switch (arguments[0]) {
 	                    case 'back':
-	                        options = backTransitionOptions;
+	                        options = defaultBackTransition;
 	                        break;
 	                }
 	            } else {
-	                $log.debug('transition function needs one argument');
+	                options = defaultTransition;
 	            }
-	            var plugin = window.plugins.nativepagetransitions;
+	            options = angular.copy(options);
+	            $log.debug('[native transition]', options);
 	            switch (options.type) {
 	                case 'flip':
-	                    plugin.flip(options);
+	                    window.plugins.nativepagetransitions.flip(options);
 	                    break;
 	                case 'fade':
-	                    plugin.fade(options);
+	                    window.plugins.nativepagetransitions.fade(options);
 	                    break;
 	                case 'curl':
-	                    plugin.curl(options);
+	                    window.plugins.nativepagetransitions.curl(options);
 	                    break;
 	                case 'drawer':
-	                    plugin.drawer(options);
+	                    window.plugins.nativepagetransitions.drawer(options);
 	                    break;
 	                case 'slide':
 	                default:
-	                    plugin.slide(options);
+	                    window.plugins.nativepagetransitions.slide(options);
 	                    break;
 	            }
 	        }
 	
 	        function registerToRouteEvents() {
 	            unregisterToRouteEvents();
+	            registerToStateChangeStartEvent();
 	
-	            var plugin = window.plugins.nativepagetransitions;
-	
-	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-	                var options = getOptions();
-	                if (angular.isObject(toState.nativepagetransitions)) {
-	                    options = angular.extend(getOptions(), toState.nativepagetransitions);
-	                } else if (toState.nativepagetransitions === null) {
-	                    return;
-	                }
-	
-	                $log.debug('transition start', options, event, toState, toParams, fromState, fromParams);
-	                transition(options);
-	            });
 	            $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-	                plugin.executePendingTransition();
+	                window.plugins.nativepagetransitions.executePendingTransition();
+	                registerToStateChangeStartEvent();
 	            });
 	            $stateChangeError = $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-	                plugin.executePendingTransition();
+	                window.plugins.nativepagetransitions.executePendingTransition();
+	                registerToStateChangeStartEvent();
+	            });
+	        }
+	
+	        function registerToStateChangeStartEvent() {
+	            if ($stateChangeStart) {
+	                return;
+	            }
+	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+	                var options = null;
+	                // Disable native transition for this state
+	                if (toState.nativeTransitions === null) {
+	                    return;
+	                }
+	                if (angular.isObject(toState.nativeTransitionsIOS) && ionic.Platform.isIOS()) {
+	                    options = toState.nativeTransitionsIOS;
+	                } else if (angular.isObject(toState.nativeTransitionsAndroid) && ionic.Platform.isAndroid()) {
+	                    options = toState.nativeTransitionsAndroid;
+	                } else if (angular.isObject(toState.nativeTransitionsWindowsPhone) && ionic.Platform.isWindowsPhone()) {
+	                    options = toState.nativeTransitionsWindowsPhone;
+	                } else if (angular.isObject(toState.nativeTransitions)) {
+	                    options = toState.nativeTransitions;
+	                }
+	                $log.debug('[native transition] $stateChangeStart', toState, options);
+	                transition(options);
 	            });
 	        }
 	
@@ -318,15 +355,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        /**
 	         * @ngdoc function
-	         * @name ionic-native-transitions.$ionicNativeTransitions#getOptions
+	         * @name ionic-native-transitions.$ionicNativeTransitions#getDefaultOptions
 	         * @access public
 	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
 	         *
 	         * @description
 	         * Get default options
 	         */
-	        function getOptions() {
-	            return options;
+	        function getDefaultOptions() {
+	            return defaultOptions;
 	        }
 	
 	        /**
@@ -340,11 +377,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        function init() {
 	            if (!isEnabled()) {
-	                $log.info('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
+	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
 	                return;
 	            }
 	            $ionicConfig.views.transition('none');
-	            angular.extend(window.plugins.nativepagetransitions.globalOptions, options);
+	            angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
+	            registerToRouteEvents();
 	        }
 	    }
 	};
@@ -354,48 +392,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/*!***************************!*\
-  !*** ./lib/nativeBack.js ***!
-  \***************************/
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	    value: true
-	});
-	
-	exports['default'] = ["$log", "$ionicNativeTransitions", "$ionicHistory", function ($log, $ionicNativeTransitions, $ionicHistory) {
-	    'ngInject';
-	
-	    link.$inject = ["scope", "element", "attrs"];
-	    return {
-	        link: link,
-	        restrict: 'A',
-	        scope: false
-	    };
-	
-	    function link(scope, element, attrs) {
-	        'ngInject';
-	
-	        if (!$ionicNativeTransitions.isEnabled()) {
-	            return;
-	        }
-	
-	        element.on('click', function (event) {
-	            event.preventDefault();
-	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	            $ionicNativeTransitions.transition('back');
-	            $ionicHistory.goBack();
-	            $ionicNativeTransitions.registerToRouteEvents();
-	        });
-	    }
-	}];
-	
-	module.exports = exports['default'];
-
-/***/ },
-/* 3 */
 /*!***************************!*\
   !*** ./lib/nativeSref.js ***!
   \***************************/
@@ -422,7 +418,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        var state = attrs.nativeUiSref;
 	        var optionsOverride = scope.$eval(attrs.nativeUiSrefOpts) || {};
-	        var options = {};
+	        var options = null;
 	
 	        attrs.$observe('nativeOptions', function (newOptions) {
 	            var evalOptions = scope.$eval(newOptions);
@@ -440,9 +436,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	            $ionicNativeTransitions.transition(options);
 	            $state.go(state, optionsOverride);
-	            $ionicNativeTransitions.registerToRouteEvents();
+	            $ionicNativeTransitions.transition(options);
+	            $ionicNativeTransitions.registerToStateChangeStartEvent();
 	        });
 	    }
 	}];
@@ -450,7 +446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 4 */
+/* 3 */
 /*!********************!*\
   !*** ./lib/run.js ***!
   \********************/
@@ -468,7 +464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 	
-	exports['default'] = ["$ionicNativeTransitions", "$ionicPlatform", "$ionicHistory", function ($ionicNativeTransitions, $ionicPlatform, $ionicHistory) {
+	exports['default'] = ["$ionicNativeTransitions", "$ionicPlatform", "$ionicHistory", "$rootScope", function ($ionicNativeTransitions, $ionicPlatform, $ionicHistory, $rootScope) {
 	    'ngInject';
 	
 	    $ionicPlatform.ready(function () {
@@ -478,15 +474,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	
-	        $ionicNativeTransitions.registerToRouteEvents();
-	    });
+	        $rootScope.$ionicGoBack = goBack;
 	
-	    $ionicPlatform.onHardwareBackButton(function (event) {
-	        event.preventDefault();
-	        $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	        $ionicNativeTransitions.transition('back');
-	        $ionicHistory.goBack();
-	        $ionicNativeTransitions.registerToRouteEvents();
+	        $ionicPlatform.onHardwareBackButton(function (event) {
+	            return goBack();
+	        });
+	
+	        function goBack() {
+	            if (!$ionicHistory.backView()) {
+	                return;
+	            }
+	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
+	            $ionicHistory.goBack();
+	            $ionicNativeTransitions.transition('back');
+	        }
 	    });
 	}];
 	

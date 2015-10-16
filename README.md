@@ -38,6 +38,12 @@ cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransit
 ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.3
 ```
 
+if you are using Crosswalk > 1.3 please add the following to your `config.xml`
+
+```
+<preference name="CrosswalkAnimatable" value="true" />
+```
+
 # Configuration
 
 ```
@@ -103,21 +109,21 @@ $ionicNativeTransitionsProvider.enable(false);
 By default any state transition will use the default transition (Defined in the configuration phase) but you can specify a different transition per state if you want using the UI router state definition:
 
 ```
-.state('one', {
-    url: "/one",
+.state('home', {
+    url: '/home',
     nativeTransitions: {
         "type": "flip",
         "direction": "up"
     }
-    templateUrl: "templates/one.html"
+    templateUrl: "templates/home.html"
 })
 ```
 
 You can also define a different transition per device like this:
 
 ```
-.state('one', {
-    url: "/one",
+.state('home', {
+    url: '/home',
     nativeTransitionsAndroid: {
         "type": "flip",
         "direction": "right"
@@ -130,15 +136,15 @@ You can also define a different transition per device like this:
         "type": "flip",
         "direction": "down"
     },
-    templateUrl: "templates/one.html"
+    templateUrl: "templates/home.html"
 })
 ```
 
-or just for N devices (here only android will be different)
+Overwrite just on device (here only android will be different)
 
 ```
-.state('one', {
-    url: "/one",
+.state('home', {
+    url: '/home',
     nativeTransitions: {
         "type": "flip",
         "direction": "up"
@@ -147,7 +153,17 @@ or just for N devices (here only android will be different)
         "type": "flip",
         "direction": "right"
     }
-    templateUrl: "templates/one.html"
+    templateUrl: "templates/home.html"
+})
+```
+
+Disable native transition for one state (for instance on tabs)
+
+```
+.state('home', {
+    url: '/home',
+    nativeTransitions: null,
+    templateUrl: "templates/home.html"
 })
 ```
 
