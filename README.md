@@ -140,7 +140,7 @@ You can also define a different transition per device like this:
 })
 ```
 
-Overwrite just on device (here only android will be different)
+Overwrite just one device (here only android will be different)
 
 ```
 .state('home', {
@@ -169,11 +169,7 @@ Disable native transition for one state (for instance on tabs)
 
 ## History back button
 
-Using the `native-back` directive on the `ion-nav-back-button` directive will force the default back transition (Defined in the configuration phase)
-
-```
-<ion-nav-back-button native-back></ion-nav-back-button>
-```
+Using the `<ion-nav-back-button native-back>` directive automatically uses the default back transition
 
 ## Hadware back button (Android)
 
@@ -181,7 +177,7 @@ The hardware back button on Android uses the default back transition
 
 ## Swipe back (iOS)
 
-
+For now swipe back will trigger the state native transition (or the default). It does not use the back transition.
 
 <a name="transitions"></a>
 
