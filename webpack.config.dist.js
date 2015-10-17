@@ -7,6 +7,9 @@ module.exports = {
     entry: path.join(libPath, 'index.js'),
     output: {
         path: distPath,
+        library: 'ionicNativeTransitions',
+        libraryTarget: "umd",
+        umdNamedDefine: true,
         filename: 'ionic-native-transitions.js'
     },
     module: {

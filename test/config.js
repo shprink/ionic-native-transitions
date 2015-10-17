@@ -1,8 +1,17 @@
 export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     'ngInject';
-    $ionicNativeTransitionsProvider.setOptions({
-        duration: 500,
-        direction: 'up'
+    $ionicNativeTransitionsProvider.setDefaultOptions({
+        duration: 500
+    });
+
+    $ionicNativeTransitionsProvider.setDefaultTransition({
+        type: 'flip',
+        direction: 'left'
+    });
+
+    $ionicNativeTransitionsProvider.setDefaultBackTransition({
+        type: 'flip',
+        direction: 'right'
     });
 
     // $ionicNativeTransitionsProvider.enable(false);
@@ -17,18 +26,62 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         })
         .state('tabs.home', {
             url: "/home",
+            nativeTransitions: null,
             views: {
                 'home-tab': {
                     templateUrl: "templates/home.html"
                 }
             }
         })
-        .state('facts', {
-            url: "/facts",
-            templateUrl: "templates/facts.html"
+        .state('one', {
+            url: "/one",
+            nativeTransitions: {
+                "type": "flip",
+                "direction": "up"
+            },
+            nativeTransitionsAndroid: {
+                "type": "flip",
+                "direction": "right"
+            },
+            nativeTransitionsIOS: {
+                "type": "flip",
+                "direction": "left"
+            },
+            nativeTransitionsWindowsPhone: {
+                "type": "flip",
+                "direction": "down"
+            },
+            templateUrl: "templates/one.html"
+        })
+        .state('two', {
+            url: "/two",
+            nativeTransitions: {
+                type: "fade"
+            },
+            nativeTransitionsIOS: {
+                "type": "flip",
+                "direction": "down" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
+            },
+            templateUrl: "templates/two.html"
+        })
+        .state('three', {
+            url: "/three",
+            nativeTransitions: {
+                type: "fade"
+            },
+            nativeTransitionsAndroid: {
+                "type": "flip",
+                "direction": "left" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
+            },
+            templateUrl: "templates/three.html"
+        })
+        .state('four', {
+            url: "/four",
+            templateUrl: "templates/four.html"
         })
         .state('tabs.about', {
             url: "/about",
+            nativeTransitions: null,
             views: {
                 'about-tab': {
                     templateUrl: "templates/about.html"
@@ -37,6 +90,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         })
         .state('tabs.contact', {
             url: "/contact",
+            nativeTransitions: null,
             views: {
                 'contact-tab': {
                     templateUrl: "templates/contact.html"

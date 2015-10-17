@@ -7,8 +7,4 @@ export default function(
     'ngInject';
 
     var vm = this;
-    vm.options = {
-        direction: "left",
-        type: "slide"
-    }
 }

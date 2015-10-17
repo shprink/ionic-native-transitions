@@ -2,29 +2,16 @@ Native transitions for Ionic
 
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
 
-## Installation
+# Installation
 
-### npm
-
-<https://www.npmjs.com/package/ionic-native-transitions>
+## npm
+[https://www.npmjs.com/package/ionic-native-transitions](https://www.npmjs.com/package/ionic-native-transitions)
 
 ```
 npm install ionic-native-transitions --save
 ```
 
-### Cordova/Ionic
-
-The recommended version for the Transition plugin is 0.4.2 or higher.
-
-```
-# Using Cordova
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
-
-# Using Ionic
-ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.2
-```
-
-## Configuration
+Then require the library
 
 ```
 # ES5
@@ -32,96 +19,219 @@ require('ionic-native-transitions');
 
 # or ES6
 import 'ionic-native-transitions';
+```
 
+## Bower
+
+```
+bower install shprink/ionic-native-transitions
+```
+
+## Cordova/Ionic
+The recommended version for the Transition plugin is 0.4.3 or higher.
+
+```
+# Using Cordova
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.3
+
+# Using Ionic CLI
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.3
+```
+
+if you are using Crosswalk > 1.3 please add the following to your `config.xml`
+
+```
+<preference name="CrosswalkAnimatable" value="true" />
+```
+
+# Configuration
+
+```
 angular.module('yourApp', [
     'ionic-native-transitions'
 ]);
 ```
 
-### Set default options
+## Set default options (optional)
+
+***Beware***: Only use `setDefaultOptions` if you know what you are doing.
 
 ```
 .config(function($ionicNativeTransitionsProvider){
-    $ionicNativeTransitionsProvider.setOptions({
-        "duration": 400, // in milliseconds (ms), default 400
-        "slowdownfactor": 4, // overlap views (higher number is more) or no overlap (1), default 4
-        "iosdelay": 60, // ms to wait for the iOS webview to update before animation kicks in, default 60
-        "androiddelay": 70, // same as above but for Android, default 70
-        "winphonedelay": 200, // same as above but for Windows Phone, default 200,
-        "fixedPixelsTop": 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
-        "fixedPixelsBottom": 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
+    $ionicNativeTransitionsProvider.setDefaultOptions({
+        duration: 400, // in milliseconds (ms), default 400,
+        slowdownfactor: 4, // overlap views (higher number is more) or no overlap (1), default 4
+        iosdelay: -1, // ms to wait for the iOS webview to update before animation kicks in, default -1
+        androiddelay: -1, // same as above but for Android, default -1
+        winphonedelay: -1, // same as above but for Windows Phone, default -1,
+        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
+        fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
     });
 });
 ```
-For more information about options please see the documentation: <http://plugins.telerik.com/cordova/plugin/native-page-transitions>
 
-### Enable/Disable (optional)
+## Set default transition (optional)
 
-You can programatically disable the plugin for any reason for instance on Windows phone (that's just an example, Windows phone is supported):
+[See the list of possible transitions](#transitions)
 
 ```
-if (ionic.Platform.isWindowsPhone()){
-    $ionicNativeTransitionsProvider.enable(false);
+.config(function($ionicNativeTransitionsProvider){
+    $ionicNativeTransitionsProvider.setDefaultTransition({
+        type: 'slide',
+        direction: 'left'
+    });
+});
+```
+
+## Set default back transition (optional)
+
+[See the list of possible transitions](#transitions)
+
+```
+.config(function($ionicNativeTransitionsProvider){
+    $ionicNativeTransitionsProvider.setDefaultBackTransition({
+        type: 'slide',
+        direction: 'right'
+    });
+});
+```
+
+## Enable/Disable (optional)
+
+You can programatically disable the plugin for any reason:
+
+```
+$ionicNativeTransitionsProvider.enable(false);
+```
+
+# Usage
+
+By default any state transition will use the default transition (Defined in the configuration phase) but you can specify a different transition per state if you want using the UI router state definition:
+
+```
+.state('home', {
+    url: '/home',
+    nativeTransitions: {
+        "type": "flip",
+        "direction": "up"
+    }
+    templateUrl: "templates/home.html"
+})
+```
+
+You can also define a different transition per device like this:
+
+```
+.state('home', {
+    url: '/home',
+    nativeTransitionsAndroid: {
+        "type": "flip",
+        "direction": "right"
+    },
+    nativeTransitionsIOS: {
+        "type": "flip",
+        "direction": "left"
+    },
+    nativeTransitionsWindowsPhone: {
+        "type": "flip",
+        "direction": "down"
+    },
+    templateUrl: "templates/home.html"
+})
+```
+
+Overwrite just one device (here only android will be different)
+
+```
+.state('home', {
+    url: '/home',
+    nativeTransitions: {
+        "type": "flip",
+        "direction": "up"
+    },
+    nativeTransitionsAndroid: {
+        "type": "flip",
+        "direction": "right"
+    }
+    templateUrl: "templates/home.html"
+})
+```
+
+Disable native transition for one state (for instance on tabs)
+
+```
+.state('home', {
+    url: '/home',
+    nativeTransitions: null,
+    templateUrl: "templates/home.html"
+})
+```
+
+## History back button
+
+Using the `<ion-nav-back-button native-back>` directive automatically uses the default back transition
+
+## Hadware back button (Android)
+
+The hardware back button on Android uses the default back transition
+
+## Swipe back (iOS)
+
+For now swipe back will trigger the state native transition (or the default). It does not use the back transition.
+
+<a name="transitions"></a>
+
+# Possible transitions
+## Slide (default animation)
+
+```
+{
+    "type"          : "slide",
+    "direction"     : "left", // 'left|right|up|down', default 'left' (which is like 'next')
+    "duration"      :  500, // in milliseconds (ms), default 400
 }
 ```
 
-## Usage
-
-You can use `native-transitions` and `native-transitions-options` directives.
-
-Using `native-transitions` alone will use the slide left animation.
+## Flip
 
 ```
-<a class="button" native-transitions ui-sref="facts">Next</a>
-```
-
-### Using scope
-
-You can overwrite any default options and set the animation type using the scope:
-
-```
-$scope.options = {
-    direction: "left",
-    type: "flip"
+{
+    "type"          : "flip",
+    "direction"     : "up", // 'left|right|up|down', default 'right' (Android currently only supports left and right)
+    "duration"      :  500, // in milliseconds (ms), default 400
 }
 ```
 
-```
-<a class="button" native-transitions native-transitions-options="{{options}}" ui-sref="facts">Next</a>
-```
-
-### Inline options
+## Fade (iOS and Android only)
 
 ```
-<ion-nav-back-button native-transitions native-transitions-options="{type: 'slide', direction:'right'}"></ion-nav-back-button>
+{
+    "type"          : "fade",
+    "duration"      :  500, // in milliseconds (ms), default 400
+}
 ```
 
-## Transitions
+## Drawer (iOS and Android only)
 
-Here are transitions specific options:
+```
+{
+    "type"          : "drawer",
+    "origin"        : "left", // 'left|right', open the drawer from this side of the view, default 'left'
+    "action"        : "open", // 'open|close', default 'open', note that close is not behaving nicely on Crosswalk
+ }
+```
 
-### Slide (default animation)
+## Curl (iOS only, direction up and down only)
 
-* ***direction***: 'left|right|up|down', default 'left' (which is like 'next')
+```
+{
+    "type"          : "curl",
+    "direction"     : "up", // 'up|down', default 'up'
+}
+```
 
-### Flip
-
-* ***direction***: 'left|right|up|down', default 'right' (Android currently only supports left and right)
-
-### Fade (iOS and Android only)
-
-### Drawer (iOS and Android only)
-
-* ***origin***: 'left|right', open the drawer from this side of the view, default 'left'
-* ***action***: 'open|close', default 'open', note that close is not behaving nicely on Crosswalk
-
-### Curl (iOS only, direction up and down only)
-
-* ***direction***: 'up|down', default 'up'
-
-## Contribute
-
-### Development
+# Contribute
+## Development
 
 ```
 npm install
@@ -134,9 +244,9 @@ npm run watch
 npm run devserver
 ```
 
-Open ```http://localhost:8080```
+Open `http://localhost:8080`
 
-### Tests on device
+## Tests on device
 
 ```
 npm run platformAddAndroid
@@ -150,6 +260,5 @@ npm run runIosDevice
 npm run runAndroid
 ```
 
-## Thanks
-
-* GAJOTRES for his great post: <http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/>
+# Thanks
+- GAJOTRES for his great post: [http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/](http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/)

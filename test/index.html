@@ -42,50 +42,50 @@
             <ion-view view-title="Home">
                 <ion-content class="">
                     <p>
-                        <a class="button button-full button-large icon icon-right ion-chevron-right" native-transitions native-transitions-options="{{main.options}}" ui-sref="facts">Test transition</a>
+                        <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="one">Start</a>
                     </p>
-                    <div class="list">
-                        <div class="item item-divider">
-                            Transition type
-                        </div>
-                        <select ng-model="main.options.type">
-                            <option value="slide">Slide</option>
-                            <option value="flip">Flip</option>
-                            <option value="fade">Fade (iOS and Android only)</option>
-                            <option value="curl">Curl (iOS only)</option>
-                            <option value="drawer">Drawer (iOS and Android only)</option>
-                        </select>
-                    </div>
-                    <div class="list">
-                        <div class="item item-divider">
-                            Transition direction
-                        </div>
-                        <select ng-model="main.options.direction">
-                            <option value="left">Left</option>
-                            <option value="right">Right</option>
-                            <option value="up">Up</option>
-                            <option value="down">Down</option>
-                        </select>
-                    </div>
                 </ion-content>
             </ion-view>
         </script>
 
-        <script id="templates/facts.html" type="text/ng-template">
-            <ion-view view-title="Facts">
+        <script id="templates/one.html" type="text/ng-template">
+            <ion-view view-title="One">
                 <ion-nav-buttons side="left">
-                    <button class="button button-clear" ui-sref="tabs.home" native-transitions native-transitions-options="{type: 'slide', direction:'right'}">
-                        <i class="icon ion-arrow-left-c"></i>
+                    <button class="button button-clear" native-ui-sref="tabs.home" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'right'}">
+                        <i class="icon ion-arrow-left-c"></i> Custom back
                     </button>
                 </ion-nav-buttons>
-                <ion-content class="padding">
+                <ion-content class="">
+                    <p>
+                        <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="two">Two</a>
+                    </p>
+                </ion-content>
+            </ion-view>
+        </script>
 
-                    {{main.options}}
-                    <p>Banging your head against a wall uses 150 calories an hour.</p>
-                    <p>Dogs have four toes on their hind feet, and five on their front feet.</p>
-                    <p>The ant can lift 50 times its own weight, can pull 30 times its own weight and always falls over on its right side when intoxicated.</p>
-                    <p>A cockroach will live nine days without it's head, before it starves to death.</p>
-                    <p>Polar bears are left handed.</p>
+        <script id="templates/two.html" type="text/ng-template">
+            <ion-view view-title="Two">
+                <ion-content class="">
+                    <p>
+                        <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="three">Three</a>
+                    </p>
+                </ion-content>
+            </ion-view>
+        </script>
+
+        <script id="templates/three.html" type="text/ng-template">
+            <ion-view view-title="Three">
+                <ion-content class="">
+                    <p>
+                        <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="four">Four</a>
+                    </p>
+                </ion-content>
+            </ion-view>
+        </script>
+
+        <script id="templates/four.html" type="text/ng-template">
+            <ion-view view-title="Four">
+                <ion-content class="">
                 </ion-content>
             </ion-view>
         </script>
