@@ -143,10 +143,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        androiddelay: -1, // same as above but for Android, default -1
 	        winphonedelay: -1, // same as above but for Windows Phone, default -1,
 	        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
-	        fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
+	        fixedPixelsBottom: 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android),
+	        pendingTransitionDelay: 100 // internal ionic-native-transitions option that delay the transition when the state is loaded. default 100
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope"];
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -251,7 +252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 	
-	    function $get($log, $ionicConfig, $rootScope) {
+	    function $get($log, $ionicConfig, $rootScope, $timeout) {
 	        'ngInject';
 	
 	        return {
@@ -303,18 +304,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	
+	        function executePendingTransition() {
+	            setTimeout(function () {
+	                window.plugins.nativepagetransitions.executePendingTransition();
+	                registerToStateChangeStartEvent();
+	            }, getDefaultOptions().pendingTransitionDelay);
+	        }
+	
 	        function registerToRouteEvents() {
 	            unregisterToRouteEvents();
 	            registerToStateChangeStartEvent();
-	
-	            $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-	                window.plugins.nativepagetransitions.executePendingTransition();
-	                registerToStateChangeStartEvent();
-	            });
-	            $stateChangeError = $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-	                window.plugins.nativepagetransitions.executePendingTransition();
-	                registerToStateChangeStartEvent();
-	            });
+	            $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', executePendingTransition);
+	            $stateChangeError = $rootScope.$on('$stateChangeError', executePendingTransition);
 	        }
 	
 	        function registerToStateChangeStartEvent() {
