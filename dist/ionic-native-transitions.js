@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-beta3
+ * @version: v1.0.0-beta4
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -170,9 +170,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var enabled = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 	
 	        enable = enabled;
-	        if (!enabled) {
-	            unregisterToRouteEvents();
-	        }
 	        return this;
 	    }
 	
