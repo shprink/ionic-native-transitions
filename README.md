@@ -1,4 +1,6 @@
-Native transitions for Ionic
+Native transitions for Ionic. Turn it on and enjoy native transitions.
+
+***Beware*** This plugin is based on a Telerik plugin that is not stable yet. Please use with caution.
 
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
 
@@ -66,7 +68,7 @@ angular.module('yourApp', [
         winphonedelay: -1, // same as above but for Windows Phone, default -1,
         fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
         fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
-        pendingTransitionDelay: 100 // internal ionic-native-transitions option that delay the transition when the state is loaded. default 100
+        triggerTransitionEvent: '$ionicView.afterEnter' // internal ionic-native-transitions option
     });
 });
 ```
