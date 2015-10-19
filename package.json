@@ -1,6 +1,6 @@
 {
     "name": "ionic-native-transitions",
-    "version": "1.0.0-beta4",
+    "version": "1.0.0-beta5",
     "description": "Native transitions for Ionic applications",
     "main": "dist/ionic-native-transitions.js",
     "scripts": {
