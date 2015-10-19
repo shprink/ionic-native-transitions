@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-beta4
+ * @version: v1.0.0-beta5
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -128,6 +128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
 	        $stateChangeError = null,
+	        $stateAfterEnter = null,
 	        defaultTransition = {
 	        type: 'slide',
 	        direction: 'left'
@@ -144,7 +145,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        winphonedelay: -1, // same as above but for Windows Phone, default -1,
 	        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
 	        fixedPixelsBottom: 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android),
-	        pendingTransitionDelay: 100 // internal ionic-native-transitions option that delay the transition when the state is loaded. default 100
+	        triggerTransitionEvent: '$ionicView.afterEnter' // internal ionic-native-transitions option
 	    };
 	
 	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout"];
@@ -280,8 +281,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                options = defaultTransition;
 	            }
 	            options = angular.copy(options);
+	            var type = options.type;
+	            delete options.type;
 	            $log.debug('[native transition]', options);
-	            switch (options.type) {
+	            switch (type) {
 	                case 'flip':
 	                    window.plugins.nativepagetransitions.flip(options);
 	                    break;
@@ -302,17 +305,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        function executePendingTransition() {
-	            setTimeout(function () {
-	                window.plugins.nativepagetransitions.executePendingTransition();
-	                registerToStateChangeStartEvent();
-	            }, getDefaultOptions().pendingTransitionDelay);
+	            window.plugins.nativepagetransitions.executePendingTransition();
+	            registerToStateChangeStartEvent();
 	        }
 	
 	        function registerToRouteEvents() {
 	            unregisterToRouteEvents();
 	            registerToStateChangeStartEvent();
-	            $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', executePendingTransition);
+	            // $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', executePendingTransition);
 	            $stateChangeError = $rootScope.$on('$stateChangeError', executePendingTransition);
+	            $stateAfterEnter = $rootScope.$on(getDefaultOptions().triggerTransitionEvent, executePendingTransition);
 	        }
 	
 	        function registerToStateChangeStartEvent() {
@@ -358,6 +360,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if ($stateChangeError && angular.isFunction($stateChangeError)) {
 	                $stateChangeError();
 	                $stateChangeError = null;
+	            }
+	            if ($stateAfterEnter && angular.isFunction($stateAfterEnter)) {
+	                $stateAfterEnter();
+	                $stateAfterEnter = null;
 	            }
 	        }
 	
