@@ -1,6 +1,6 @@
 Native transitions for Ionic. Turn it on and enjoy native transitions.
 
-***Beware*** This plugin is based on a Telerik plugin that is not stable yet. Please use with caution.
+***Beware*** This plugin is based on a [Telerik plugin](https://github.com/Telerik-Verified-Plugins/NativePageTransitions) that is not stable yet. Please use with caution.
 
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
 
@@ -30,14 +30,14 @@ bower install shprink/ionic-native-transitions
 ```
 
 ## Cordova/Ionic
-The recommended version for the Transition plugin is 0.4.3 or higher.
+The recommended version for the Transition plugin is 0.5.0 or higher.
 
 ```
 # Using Cordova
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.3
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.0
 
 # Using Ionic CLI
-ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.4.3
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.0
 ```
 
 if you are using Crosswalk > 1.3 please add the following to your `config.xml`
@@ -264,4 +264,6 @@ npm run runAndroid
 ```
 
 # Thanks
+
+- Eddy Verbruggen for his amazing job on: <https://github.com/Telerik-Verified-Plugins/NativePageTransitions>
 - GAJOTRES for his great post: [http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/](http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/)
