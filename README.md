@@ -30,6 +30,7 @@ bower install shprink/ionic-native-transitions
 ```
 
 ## Cordova/Ionic
+
 The recommended version for the Transition plugin is 0.5.0 or higher.
 
 ```
@@ -39,6 +40,20 @@ cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransit
 # Using Ionic CLI
 ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.0
 ```
+
+### iOS
+
+Transitions on iOS9 can flicker sometimes. To prevent this from hapenning you can install this plugin:
+
+```
+# Using Cordova
+cordova plugin add cordova-plugin-wkwebview
+
+# Using Ionic CLI
+ionic plugin add cordova-plugin-wkwebview
+```
+
+### Android
 
 if you are using Crosswalk > 1.3 please add the following to your `config.xml`
 
