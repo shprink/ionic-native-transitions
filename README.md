@@ -31,14 +31,14 @@ bower install shprink/ionic-native-transitions
 
 ## Cordova/Ionic
 
-The recommended version for the Transition plugin is 0.5.2 or higher.
+The recommended version for the Transition plugin is 0.5.4 or higher.
 
 ```
 # Using Cordova
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.2
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.4
 
 # Using Ionic CLI
-ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.2
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.4
 ```
 
 ### iOS
