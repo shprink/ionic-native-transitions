@@ -3,7 +3,6 @@ Native transitions for Ionic. Turn it on and enjoy native transitions.
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
 
 # Installation
-
 ## npm
 [https://www.npmjs.com/package/ionic-native-transitions](https://www.npmjs.com/package/ionic-native-transitions)
 
@@ -28,7 +27,6 @@ bower install shprink/ionic-native-transitions
 ```
 
 ## Cordova/Ionic
-
 The recommended version for the Transition plugin is 0.5.4 or higher.
 
 ```
@@ -40,7 +38,6 @@ ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitio
 ```
 
 ### iOS
-
 Transitions on iOS9 can flicker sometimes. To prevent this from hapenning you can install this plugin:
 
 ```
@@ -52,7 +49,6 @@ ionic plugin add cordova-plugin-wkwebview
 ```
 
 ### Android
-
 if you are using Crosswalk > 1.3 please add the following to your `config.xml`
 
 ```
@@ -68,8 +64,7 @@ angular.module('yourApp', [
 ```
 
 ## Set default options (optional)
-
-***Beware***: Only use `setDefaultOptions` if you know what you are doing.
+**_Beware_**: Only use `setDefaultOptions` if you know what you are doing.
 
 ```
 .config(function($ionicNativeTransitionsProvider){
@@ -87,7 +82,6 @@ angular.module('yourApp', [
 ```
 
 ## Set default transition (optional)
-
 [See the list of possible transitions](#transitions)
 
 ```
@@ -100,7 +94,6 @@ angular.module('yourApp', [
 ```
 
 ## Set default back transition (optional)
-
 [See the list of possible transitions](#transitions)
 
 ```
@@ -113,19 +106,32 @@ angular.module('yourApp', [
 ```
 
 ## Enable/Disable (optional)
-
 You can programatically disable the plugin for any reason:
 
 ```
 # Within the config phase
+# * @param {boolean} enabled
 $ionicNativeTransitionsProvider.enable(false);
 
 # Anywhere else (controller, service etc.)
+# * @param {boolean} enabled                    default true
+# * @param {boolean} disableIonicTransitions    default true
+# * @param {string}  ionicTransitionType        default 'platform'
+
+# Disable plugin and enable ionic transitions (same as: enable(false, false))
 $ionicNativeTransitions.enable(false);
+
+# Enable plugin and disable ionic transitions (same as: enable(true, true))
+$ionicNativeTransitions.enable(true);
+
+# Disable plugin and disable ionic transitions
+$ionicNativeTransitions.enable(false, true);
+
+# Enable plugin and enable ionic transitions (in some cases it is useful <https://github.com/shprink/ionic-native-transitions/issues/23>)
+$ionicNativeTransitions.enable(true, false);
 ```
 
 # Usage
-
 By default any state transition will use the default transition (Defined in the configuration phase) but you can specify a different transition per state if you want using the UI router state definition:
 
 ```
@@ -188,21 +194,17 @@ Disable native transition for one state (for instance on tabs)
 ```
 
 ## History back button
-
 Using the `<ion-nav-back-button native-back>` directive automatically uses the default back transition
 
 ## Hadware back button (Android)
-
 The hardware back button on Android uses the default back transition
 
 ## Swipe back (iOS)
-
 For now swipe back will trigger the state native transition (or the default). It does not use the back transition.
 
 <a name="transitions"></a>
 
 ## Events
-
 You can listen to success or error events
 
 ```
@@ -295,6 +297,5 @@ npm run runAndroid
 ```
 
 # Thanks
-
-- Eddy Verbruggen for his amazing job on: <https://github.com/Telerik-Verified-Plugins/NativePageTransitions>
+- Eddy Verbruggen for his amazing job on: [https://github.com/Telerik-Verified-Plugins/NativePageTransitions](https://github.com/Telerik-Verified-Plugins/NativePageTransitions)
 - GAJOTRES for his great post: [http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/](http://www.gajotres.net/handling-native-view-animations-with-ionic-framework/)
