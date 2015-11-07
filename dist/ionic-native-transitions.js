@@ -256,6 +256,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            init: init,
 	            getDefaultOptions: getDefaultOptions,
+	            enable: enableFromService,
 	            isEnabled: isEnabled,
 	            transition: transition,
 	            registerToRouteEvents: registerToRouteEvents,
@@ -263,6 +264,54 @@ return /******/ (function(modules) { // webpackBootstrap
 	            registerToStateChangeStartEvent: registerToStateChangeStartEvent,
 	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent
 	        };
+	
+	        /**
+	        * @ngdoc function
+	        * @name ionic-native-transitions.$ionicNativeTransitions#enable
+	        * @access public
+	        * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	        *
+	        * @description
+	        * enable/disable plugin
+	        * @param {boolean} enabled
+	        * @param {boolean} disableIonicTransitions
+	        * @param {string}  ionicTransitionType
+	        */
+	        function enableFromService() {
+	            var enabled = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	            var disableIonicTransitions = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	            var ionicTransitionType = arguments.length <= 2 || arguments[2] === undefined ? 'platform' : arguments[2];
+	
+	            if (enabled && !(window.cordova && window.plugins && window.plugins.nativepagetransitions)) {
+	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
+	                return;
+	            }
+	            enable = enabled;
+	
+	            if (enabled) {
+	                $log.debug('[native transition] enabling plugin');
+	                if (window.plugins && window.plugins.nativepagetransitions) {
+	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
+	                }
+	                registerToRouteEvents();
+	            } else {
+	                $log.debug('[native transition] disabling plugin');
+	                if (typeof arguments[1] === 'undefined') {
+	                    disableIonicTransitions = false;
+	                }
+	                unregisterToRouteEvents();
+	            }
+	
+	            if (disableIonicTransitions) {
+	                $log.debug('[native transition] disabling ionic transitions');
+	                $ionicConfig.views.transition('none');
+	            } else {
+	                $log.debug('[native transition] enabling ionic transitions');
+	                $ionicConfig.views.transition(ionicTransitionType);
+	            }
+	
+	            return this;
+	        }
 	
 	        function transition() {
 	            if (!isEnabled()) {
@@ -393,10 +442,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!isEnabled()) {
 	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
 	                return;
+	            } else {
+	                enableFromService();
 	            }
-	            $ionicConfig.views.transition('none');
-	            angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
-	            registerToRouteEvents();
 	        }
 	    }
 	};

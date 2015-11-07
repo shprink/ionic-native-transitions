@@ -44,6 +44,11 @@
                     <p>
                         <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="one">Start</a>
                     </p>
+                    Is enabled: {{main.isEnable}}
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.enable()">Enable plugin</a>
+
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.disable()">Disable plugin</a>
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.disableWithoutDisablingIonicTransitions()">Disable plugin and ionic transitions</a>
                 </ion-content>
             </ion-view>
         </script>

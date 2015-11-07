@@ -1,7 +1,5 @@
 Native transitions for Ionic. Turn it on and enjoy native transitions.
 
-***Beware*** This plugin is based on a [Telerik plugin](https://github.com/Telerik-Verified-Plugins/NativePageTransitions) that is not stable yet. Please use with caution.
-
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
 
 # Installation
@@ -119,7 +117,11 @@ angular.module('yourApp', [
 You can programatically disable the plugin for any reason:
 
 ```
+# Within the config phase
 $ionicNativeTransitionsProvider.enable(false);
+
+# Anywhere else (controller, service etc.)
+$ionicNativeTransitions.enable(false);
 ```
 
 # Usage
