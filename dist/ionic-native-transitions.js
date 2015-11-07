@@ -266,17 +266,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	
 	        /**
-	        * @ngdoc function
-	        * @name ionic-native-transitions.$ionicNativeTransitions#enable
-	        * @access public
-	        * @methodOf ionic-native-transitions.$ionicNativeTransitions
-	        *
-	        * @description
-	        * enable/disable plugin
-	        * @param {boolean} enabled
-	        * @param {boolean} disableIonicTransitions
-	        * @param {string}  ionicTransitionType
-	        */
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#enable
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * enable/disable plugin
+	         * @param {boolean} enabled
+	         * @param {boolean} disableIonicTransitions
+	         * @param {string}  ionicTransitionType
+	         */
 	        function enableFromService() {
 	            var enabled = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 	            var disableIonicTransitions = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
@@ -335,26 +335,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $log.debug('[native transition]', options);
 	            switch (type) {
 	                case 'flip':
-	                    window.plugins.nativepagetransitions.flip(options);
+	                    window.plugins.nativepagetransitions.flip(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'fade':
-	                    window.plugins.nativepagetransitions.fade(options);
+	                    window.plugins.nativepagetransitions.fade(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'curl':
-	                    window.plugins.nativepagetransitions.curl(options);
+	                    window.plugins.nativepagetransitions.curl(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'drawer':
-	                    window.plugins.nativepagetransitions.drawer(options);
+	                    window.plugins.nativepagetransitions.drawer(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'slide':
 	                default:
-	                    window.plugins.nativepagetransitions.slide(options);
+	                    window.plugins.nativepagetransitions.slide(options, transitionSuccess, transitionError);
 	                    break;
+	            }
+	
+	            function getTransitionDuration() {
+	                var duration = undefined;
+	                if (options.duration) {
+	                    duration = parseInt(options.duration);
+	                } else {
+	                    duration = parseInt(getDefaultOptions().duration);
+	                }
+	                if (ionic.Platform.isAndroid()) {
+	                    if (options.androiddelay) {
+	                        duration += parseInt(options.androiddelay);
+	                    } else {
+	                        duration += parseInt(getDefaultOptions().androiddelay);
+	                    }
+	                } else if (ionic.Platform.isIOS()) {
+	                    if (options.iosdelay) {
+	                        duration += parseInt(options.iosdelay);
+	                    } else {
+	                        duration += parseInt(getDefaultOptions().iosdelay);
+	                    }
+	                } else if (ionic.Platform.isWindowsPhone()) {
+	                    if (options.winphonedelay) {
+	                        duration += parseInt(options.winphonedelay);
+	                    } else {
+	                        duration += parseInt(getDefaultOptions().winphonedelay);
+	                    }
+	                }
+	                return duration;
+	            }
+	
+	            function transitionSuccess() {
+	                setTimeout(function () {
+	                    return $rootScope.$broadcast('ionicNativeTransitions.success');
+	                }, getTransitionDuration());
+	            }
+	
+	            function transitionError() {
+	                setTimeout(function () {
+	                    return $rootScope.$broadcast('ionicNativeTransitions.error');
+	                }, getTransitionDuration());
 	            }
 	        }
 	
 	        function executePendingTransition() {
 	            window.plugins.nativepagetransitions.executePendingTransition();
+	            // $rootScope.$broadcast('ionicNativeTransitions.', executePendingTransition);
 	            registerToStateChangeStartEvent();
 	        }
 	

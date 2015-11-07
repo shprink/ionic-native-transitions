@@ -1,5 +1,6 @@
 export default function(
     $scope,
+    $rootScope,
     $log,
     $ionicNativeTransitions
 ) {
@@ -11,6 +12,14 @@ export default function(
     vm.enable = enable;
     vm.disable = disable;
     vm.disableWithoutDisablingIonicTransitions = disableWithoutDisablingIonicTransitions;
+
+    $rootScope.$on('ionicNativeTransitions.success', function(){
+        $log.info('yeah!');
+    });
+
+    $rootScope.$on('ionicNativeTransitions.error', function(){
+        $log.info(':(');
+    });
 
     function enable(){
         $ionicNativeTransitions.enable();

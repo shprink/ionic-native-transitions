@@ -201,6 +201,20 @@ For now swipe back will trigger the state native transition (or the default). It
 
 <a name="transitions"></a>
 
+## Events
+
+You can listen to success or error events
+
+```
+$rootScope.$on('ionicNativeTransitions.success', function(){
+    // Transition success
+});
+
+$rootScope.$on('ionicNativeTransitions.error', function(){
+    // Transition error
+});
+```
+
 # Possible transitions
 ## Slide (default animation)
 
