@@ -127,7 +127,8 @@ $ionicNativeTransitions.enable(true);
 # Disable plugin and disable ionic transitions
 $ionicNativeTransitions.enable(false, true);
 
-# Enable plugin and enable ionic transitions (in some cases it is useful <https://github.com/shprink/ionic-native-transitions/issues/23>)
+# Enable plugin and enable ionic transitions
+# in some cases it is useful <https://github.com/shprink/ionic-native-transitions/issues/23>
 $ionicNativeTransitions.enable(true, false);
 ```
 
@@ -191,6 +192,45 @@ Disable native transition for one state (for instance on tabs)
     nativeTransitions: null,
     templateUrl: "templates/home.html"
 })
+```
+
+## Programatically change page with native transitions
+
+### State
+
+```
+# * @description
+# * Call state go and apply a native transition
+# * @param {string|null}    state              default:null
+# * @param {object}         stateOptions       default:{}
+# * @param {object|null}    transitionOptions  default:null
+
+$ionicNativeTransitions.stateGo('yourState', {}, {
+    "type": "slide",
+    "direction": "up", // 'left|right|up|down', default 'left' (which is like 'next')
+    "duration": 1500, // in milliseconds (ms), default 400
+});
+```
+
+### Location.url
+
+```
+# * @description
+# * Call location url and apply a native transition
+# * @param {string|null} url                 default:null
+# * @param {object|null} transitionOptions   default:null
+
+$ionicNativeTransitions.locationUrl('/yourUrl', {
+    "type": "slide",
+    "direction": "down", // 'left|right|up|down', default 'left' (which is like 'next')
+    "duration": 1500, // in milliseconds (ms), default 400
+});
+```
+
+## Using directives
+
+```
+<button native-ui-sref="tabs.home" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'down'}"></button>
 ```
 
 ## History back button
