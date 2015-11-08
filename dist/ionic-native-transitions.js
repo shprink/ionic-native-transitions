@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-beta6
+ * @version: v1.0.0-rc1
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -267,6 +267,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            stateGo: stateGo
 	        };
 	
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#locationUrl
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * Call location url and apply a native transition
+	         * @param {string|null} url                 default:null
+	         * @param {object|null} transitionOptions   default:null
+	         */
 	        function locationUrl() {
 	            var url = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 	            var transitionOptions = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
@@ -280,6 +291,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	            transition(transitionOptions);
 	        }
 	
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#stateGo
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * Call state go and apply a native transition
+	         * @param {string|null} state              default:null
+	         * @param {object}      stateOptions       default:{}
+	         * @param {object|null} transitionOptions  default:null
+	         */
 	        function stateGo() {
 	            var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
 	            var stateOptions = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
