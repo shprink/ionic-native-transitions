@@ -77,7 +77,14 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         })
         .state('four', {
             url: "/four",
-            templateUrl: "templates/four.html"
+            params: {
+                test: null
+            },
+            templateUrl: "templates/four.html",
+            controller: function($stateParams){
+                'ngInject';
+                console.log('$stateParams', $stateParams);
+            }
         })
         .state('tabs.about', {
             url: "/about",

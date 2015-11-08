@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-beta6
+ * @version: v1.0.0-rc1
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -148,7 +148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        triggerTransitionEvent: '$ionicView.afterEnter' // internal ionic-native-transitions option
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout"];
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -250,19 +250,120 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 	
-	    function $get($log, $ionicConfig, $rootScope, $timeout) {
+	    function $get($log, $ionicConfig, $rootScope, $timeout, $state, $location) {
 	        'ngInject';
 	
 	        return {
 	            init: init,
 	            getDefaultOptions: getDefaultOptions,
+	            enable: enableFromService,
 	            isEnabled: isEnabled,
 	            transition: transition,
 	            registerToRouteEvents: registerToRouteEvents,
 	            unregisterToRouteEvents: unregisterToRouteEvents,
 	            registerToStateChangeStartEvent: registerToStateChangeStartEvent,
-	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent
+	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent,
+	            locationUrl: locationUrl,
+	            stateGo: stateGo
 	        };
+	
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#locationUrl
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * Call location url and apply a native transition
+	         * @param {string|null} url                 default:null
+	         * @param {object|null} transitionOptions   default:null
+	         */
+	        function locationUrl() {
+	            var url = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	            var transitionOptions = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	
+	            if (!url) {
+	                $log.debug('[native transition] cannot change url without url...');
+	                return;
+	            }
+	            unregisterToStateChangeStartEvent();
+	            $location.url(url);
+	            transition(transitionOptions);
+	        }
+	
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#stateGo
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * Call state go and apply a native transition
+	         * @param {string|null} state              default:null
+	         * @param {object}      stateOptions       default:{}
+	         * @param {object|null} transitionOptions  default:null
+	         */
+	        function stateGo() {
+	            var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
+	            var stateOptions = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	            var transitionOptions = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
+	            if (!state) {
+	                $log.debug('[native transition] cannot change state without a state...');
+	                return;
+	            }
+	            unregisterToStateChangeStartEvent();
+	            $state.go(state, stateOptions);
+	            transition(transitionOptions);
+	        }
+	
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#enable
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * enable/disable plugin
+	         * @param {boolean} enabled
+	         * @param {boolean} disableIonicTransitions
+	         * @param {string}  ionicTransitionType
+	         */
+	        function enableFromService() {
+	            var enabled = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	            var disableIonicTransitions = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	            var ionicTransitionType = arguments.length <= 2 || arguments[2] === undefined ? 'platform' : arguments[2];
+	
+	            if (enabled && !(window.cordova && window.plugins && window.plugins.nativepagetransitions)) {
+	                $log.debug('[native transition] is disabled or nativepagetransitions plugin is not present');
+	                return;
+	            }
+	            enable = enabled;
+	
+	            if (enabled) {
+	                $log.debug('[native transition] enabling plugin');
+	                if (window.plugins && window.plugins.nativepagetransitions) {
+	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
+	                }
+	                registerToRouteEvents();
+	            } else {
+	                $log.debug('[native transition] disabling plugin');
+	                if (typeof arguments[1] === 'undefined') {
+	                    disableIonicTransitions = false;
+	                }
+	                unregisterToRouteEvents();
+	            }
+	
+	            if (disableIonicTransitions) {
+	                $log.debug('[native transition] disabling ionic transitions');
+	                $ionicConfig.views.transition('none');
+	            } else {
+	                $log.debug('[native transition] enabling ionic transitions');
+	                $ionicConfig.views.transition(ionicTransitionType);
+	            }
+	
+	            return this;
+	        }
 	
 	        function transition() {
 	            if (!isEnabled()) {
@@ -286,26 +387,68 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $log.debug('[native transition]', options);
 	            switch (type) {
 	                case 'flip':
-	                    window.plugins.nativepagetransitions.flip(options);
+	                    window.plugins.nativepagetransitions.flip(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'fade':
-	                    window.plugins.nativepagetransitions.fade(options);
+	                    window.plugins.nativepagetransitions.fade(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'curl':
-	                    window.plugins.nativepagetransitions.curl(options);
+	                    window.plugins.nativepagetransitions.curl(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'drawer':
-	                    window.plugins.nativepagetransitions.drawer(options);
+	                    window.plugins.nativepagetransitions.drawer(options, transitionSuccess, transitionError);
 	                    break;
 	                case 'slide':
 	                default:
-	                    window.plugins.nativepagetransitions.slide(options);
+	                    window.plugins.nativepagetransitions.slide(options, transitionSuccess, transitionError);
 	                    break;
+	            }
+	
+	            function getTransitionDuration() {
+	                var duration = undefined;
+	                if (options.duration) {
+	                    duration = parseInt(options.duration);
+	                } else {
+	                    duration = parseInt(getDefaultOptions().duration);
+	                }
+	                if (ionic.Platform.isAndroid()) {
+	                    if (options.androiddelay) {
+	                        duration += parseInt(options.androiddelay);
+	                    } else {
+	                        duration += parseInt(getDefaultOptions().androiddelay);
+	                    }
+	                } else if (ionic.Platform.isIOS()) {
+	                    if (options.iosdelay) {
+	                        duration += parseInt(options.iosdelay);
+	                    } else {
+	                        duration += parseInt(getDefaultOptions().iosdelay);
+	                    }
+	                } else if (ionic.Platform.isWindowsPhone()) {
+	                    if (options.winphonedelay) {
+	                        duration += parseInt(options.winphonedelay);
+	                    } else {
+	                        duration += parseInt(getDefaultOptions().winphonedelay);
+	                    }
+	                }
+	                return duration;
+	            }
+	
+	            function transitionSuccess() {
+	                setTimeout(function () {
+	                    return $rootScope.$broadcast('ionicNativeTransitions.success');
+	                }, getTransitionDuration());
+	            }
+	
+	            function transitionError() {
+	                setTimeout(function () {
+	                    return $rootScope.$broadcast('ionicNativeTransitions.error');
+	                }, getTransitionDuration());
 	            }
 	        }
 	
 	        function executePendingTransition() {
 	            window.plugins.nativepagetransitions.executePendingTransition();
+	            // $rootScope.$broadcast('ionicNativeTransitions.', executePendingTransition);
 	            registerToStateChangeStartEvent();
 	        }
 	
@@ -393,10 +536,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (!isEnabled()) {
 	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
 	                return;
+	            } else {
+	                enableFromService();
 	            }
-	            $ionicConfig.views.transition('none');
-	            angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
-	            registerToRouteEvents();
 	        }
 	    }
 	};
@@ -449,10 +591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	
-	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	            $state.go(state, optionsOverride);
-	            $ionicNativeTransitions.transition(options);
-	            $ionicNativeTransitions.registerToStateChangeStartEvent();
+	            $ionicNativeTransitions.stateGo(state, optionsOverride, options);
 	        });
 	    }
 	}];

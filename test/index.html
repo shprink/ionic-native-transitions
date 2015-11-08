@@ -44,6 +44,13 @@
                     <p>
                         <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="one">Start</a>
                     </p>
+                    Is enabled: {{main.isEnable}}
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.enable()">Enable plugin</a>
+
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.disable()">Disable plugin</a>
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.disableWithoutDisablingIonicTransitions()">Disable plugin and ionic transitions</a>
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.stateGo()">StateGo</a>
+                    <a class="button button-full button-large icon icon-right ion-chevron-right" ng-click="main.locationUrl()">LocationUrl</a>
                 </ion-content>
             </ion-view>
         </script>
@@ -51,7 +58,7 @@
         <script id="templates/one.html" type="text/ng-template">
             <ion-view view-title="One">
                 <ion-nav-buttons side="left">
-                    <button class="button button-clear" native-ui-sref="tabs.home" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'right'}">
+                    <button class="button button-clear" native-ui-sref="tabs.home" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'down'}">
                         <i class="icon ion-arrow-left-c"></i> Custom back
                     </button>
                 </ion-nav-buttons>
