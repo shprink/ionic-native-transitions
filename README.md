@@ -242,6 +242,12 @@ The hardware back button on Android uses the default back transition
 ## Swipe back (iOS)
 For now swipe back will trigger the state native transition (or the default). It does not use the back transition.
 
+You can disable swipe back like this:
+
+```
+$ionicConfigProvider.views.swipeBackEnabled(false);
+```
+
 <a name="transitions"></a>
 
 ## Events
