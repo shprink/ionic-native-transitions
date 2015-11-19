@@ -10,13 +10,26 @@
     </head>
 
     <body ng-app="test" ng-strict-di ng-controller="MainController as main">
-        <ion-nav-bar class="bar-positive">
-            <ion-nav-back-button class="button-icon ion-arrow-left-c">
-            </ion-nav-back-button>
-        </ion-nav-bar>
-
-        <ion-nav-view></ion-nav-view>
-
+        <ion-side-menus enable-menu-with-back-views="true">
+            <ion-side-menu-content>
+                <ion-nav-bar class="bar-positive">
+                    <ion-nav-back-button class="button-icon ion-arrow-left-c">
+                    </ion-nav-back-button>
+                    <ion-nav-buttons side="left">
+                        <button menu-toggle="left" class="button button-clear">
+                            <i class="icon ion-navicon-round"></i>
+                        </button>
+                    </ion-nav-buttons>
+                    <ion-nav-buttons side="right">
+                        <button class="button button-clear"  ng-click="main.openModal()">
+                            <i class="icon ion-open"></i> Modal
+                        </button>
+                    </ion-nav-buttons>
+                </ion-nav-bar>
+                <ion-nav-view></ion-nav-view>
+            </ion-side-menu-content>
+            <ion-side-menu side="left" ui-view="menu"></ion-side-menu>
+        </ion-side-menus>
 
         <script id="templates/tabs.html" type="text/ng-template">
             <ion-tabs class="tabs-icon-top tabs-positive">
