@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc1
+ * @version: v1.0.0-rc2
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -148,7 +148,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        triggerTransitionEvent: '$ionicView.afterEnter' // internal ionic-native-transitions option
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location"];
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -250,8 +250,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 	
-	    function $get($log, $ionicConfig, $rootScope, $timeout, $state, $location) {
+	    function $get($log, $ionicConfig, $rootScope, $timeout, $state, $location, $ionicHistory, $ionicPlatform) {
 	        'ngInject';
+	
+	        var legacyGoBack = undefined;
 	
 	        return {
 	            init: init,
@@ -264,7 +266,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            registerToStateChangeStartEvent: registerToStateChangeStartEvent,
 	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent,
 	            locationUrl: locationUrl,
-	            stateGo: stateGo
+	            stateGo: stateGo,
+	            goBack: goBack
 	        };
 	
 	        /**
@@ -345,12 +348,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (window.plugins && window.plugins.nativepagetransitions) {
 	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
 	                }
+	                $rootScope.$ionicGoBack = goBack;
+	                $ionicPlatform.onHardwareBackButton(goBackHardware);
 	                registerToRouteEvents();
 	            } else {
 	                $log.debug('[native transition] disabling plugin');
 	                if (typeof arguments[1] === 'undefined') {
 	                    disableIonicTransitions = false;
 	                }
+	                $rootScope.$ionicGoBack = legacyGoBack;
+	                $ionicPlatform.onHardwareBackButton($rootScope.$ionicGoBack);
 	                unregisterToRouteEvents();
 	            }
 	
@@ -533,11 +540,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Init nativepagetransitions plugin
 	         */
 	        function init() {
+	            legacyGoBack = $rootScope.$ionicGoBack;
 	            if (!isEnabled()) {
 	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
 	                return;
 	            } else {
 	                enableFromService();
+	            }
+	        }
+	
+	        function goBack(e) {
+	            if (!$ionicHistory.backView()) {
+	                return;
+	            }
+	            unregisterToStateChangeStartEvent();
+	            $ionicHistory.goBack();
+	            transition('back');
+	        }
+	
+	        function goBackHardware(hasCanceledUi) {
+	            if (!hasCanceledUi) {
+	                goBack();
 	            }
 	        }
 	    }
@@ -614,34 +637,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	    value: true
+	  value: true
 	});
 	
 	exports['default'] = ["$ionicNativeTransitions", "$ionicPlatform", "$ionicHistory", "$rootScope", function ($ionicNativeTransitions, $ionicPlatform, $ionicHistory, $rootScope) {
-	    'ngInject';
+	  'ngInject';
 	
-	    $ionicPlatform.ready(function () {
-	        $ionicNativeTransitions.init();
-	
-	        if (!$ionicNativeTransitions.isEnabled()) {
-	            return;
-	        }
-	
-	        $rootScope.$ionicGoBack = goBack;
-	
-	        $ionicPlatform.onHardwareBackButton(function (event) {
-	            return goBack();
-	        });
-	
-	        function goBack() {
-	            if (!$ionicHistory.backView()) {
-	                return;
-	            }
-	            $ionicNativeTransitions.unregisterToStateChangeStartEvent();
-	            $ionicHistory.goBack();
-	            $ionicNativeTransitions.transition('back');
-	        }
-	    });
+	  $ionicPlatform.ready(function () {
+	    $ionicNativeTransitions.init();
+	  });
 	}];
 	
 	;

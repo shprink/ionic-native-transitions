@@ -14,7 +14,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
         direction: 'right'
     });
 
-    // $ionicNativeTransitionsProvider.enable(false);
+    $ionicNativeTransitionsProvider.enable(false);
 
     $ionicConfigProvider.tabs.position('top');
 
