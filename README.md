@@ -76,7 +76,8 @@ angular.module('yourApp', [
         winphonedelay: -1, // same as above but for Windows Phone, default -1,
         fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
         fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
-        triggerTransitionEvent: '$ionicView.afterEnter' // internal ionic-native-transitions option
+        triggerTransitionEvent: '$ionicView.afterEnter', // internal ionic-native-transitions option
+        backInOppositeDirection: false // Takes over default back transition and state back transition to use the opposite direction transition to go back
     });
 });
 ```
@@ -146,7 +147,7 @@ By default any state transition will use the default transition (Defined in the 
 })
 ```
 
-You can also define a different transition per device like this:
+You can also define a different transition (backward and forward) per device like this:
 
 ```
 .state('home', {
@@ -162,6 +163,18 @@ You can also define a different transition per device like this:
     nativeTransitionsWindowsPhone: {
         "type": "flip",
         "direction": "down"
+    },
+    nativeTransitionsBackAndroid: {
+        "type": "flip",
+        "direction": "left"
+    },
+    nativeTransitionsBackIOS: {
+        "type": "flip",
+        "direction": "right"
+    },
+    nativeTransitionsBackWindowsPhone: {
+        "type": "flip",
+        "direction": "up"
     },
     templateUrl: "templates/home.html"
 })

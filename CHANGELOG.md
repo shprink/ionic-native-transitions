@@ -1,3 +1,14 @@
+<a name="1.0.0-rc3"></a>
+### 1.0.0-rc3
+
+* [FEATURE] Opposite transition on back button (backInOppositeDirection: true) <https://github.com/shprink/ionic-native-transitions/issues/27>
+* [FEATURE] Back transition per state <https://github.com/shprink/ionic-native-transitions/issues/28>
+
+<a name="1.0.0-rc2"></a>
+### 1.0.0-rc2
+
+* [BUGFIX] Hardware back button now closes Modal, Menu or Action Sheet before transition. <https://github.com/shprink/ionic-native-transitions/issues/32>
+
 <a name="1.0.0-rc1"></a>
 ### 1.0.0-rc1
 

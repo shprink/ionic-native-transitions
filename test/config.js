@@ -1,7 +1,8 @@
 export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     'ngInject';
     $ionicNativeTransitionsProvider.setDefaultOptions({
-        duration: 500
+        duration: 500,
+        // backInOppositeDirection: true
     });
 
     $ionicNativeTransitionsProvider.setDefaultTransition({
@@ -10,7 +11,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
     });
 
     $ionicNativeTransitionsProvider.setDefaultBackTransition({
-        type: 'flip',
+        type: 'slide',
         direction: 'right'
     });
 
@@ -43,6 +44,10 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
                 "type": "flip",
                 "direction": "right"
             },
+            nativeTransitionsBackAndroid: {
+                "type": "flip",
+                "direction": "left"
+            },
             nativeTransitionsIOS: {
                 "type": "flip",
                 "direction": "left"
@@ -70,8 +75,12 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
                 type: "fade"
             },
             nativeTransitionsAndroid: {
-                "type": "flip",
-                "direction": "left" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
+                "type": "slide",
+                "direction": "up" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
+            },
+            nativeTransitionsBackAndroid: {
+                "type": "slide",
+                "direction": "down" // 'left|right|up|down', default 'right' (Android currently only supports left and right)
             },
             templateUrl: "templates/three.html"
         })
