@@ -129,6 +129,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $stateChangeSuccess = null,
 	        $stateChangeError = null,
 	        $stateAfterEnter = null,
+	        oppositeDirections = {
+	        up: 'down',
+	        down: 'up',
+	        left: 'right',
+	        right: 'left'
+	    },
 	        defaultTransition = {
 	        type: 'slide',
 	        direction: 'left'
@@ -145,7 +151,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        winphonedelay: -1, // same as above but for Windows Phone, default -1,
 	        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
 	        fixedPixelsBottom: 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android),
-	        triggerTransitionEvent: '$ionicView.afterEnter' // internal ionic-native-transitions option
+	        triggerTransitionEvent: '$ionicView.afterEnter', // internal ionic-native-transitions option
+	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
 	    };
 	
 	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
@@ -382,7 +389,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else if (angular.isString(arguments[0])) {
 	                switch (arguments[0]) {
 	                    case 'back':
-	                        options = defaultBackTransition;
+	                        if (getDefaultOptions().backInOppositeDirection && arguments[1] && getStateTransition(arguments[1])) {
+	                            options = getStateTransition(arguments[1]);
+	                            if (options.direction) {
+	                                options.direction = oppositeDirections[options.direction];
+	                            }
+	                        } else if (arguments[2] && getBackStateTransition(arguments[2])) {
+	                            options = getBackStateTransition(arguments[2]);
+	                        } else {
+	                            options = defaultBackTransition;
+	                        }
 	                        break;
 	                }
 	            } else {
@@ -477,18 +493,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (toState.nativeTransitions === null) {
 	                    return;
 	                }
-	                if (angular.isObject(toState.nativeTransitionsIOS) && ionic.Platform.isIOS()) {
-	                    options = toState.nativeTransitionsIOS;
-	                } else if (angular.isObject(toState.nativeTransitionsAndroid) && ionic.Platform.isAndroid()) {
-	                    options = toState.nativeTransitionsAndroid;
-	                } else if (angular.isObject(toState.nativeTransitionsWindowsPhone) && ionic.Platform.isWindowsPhone()) {
-	                    options = toState.nativeTransitionsWindowsPhone;
-	                } else if (angular.isObject(toState.nativeTransitions)) {
-	                    options = toState.nativeTransitions;
-	                }
+	                options = getStateTransition(toState);
 	                $log.debug('[native transition] $stateChangeStart', toState, options);
 	                transition(options);
 	            });
+	        }
+	
+	        function getBackStateTransition(state) {
+	            if (angular.isObject(state.nativeTransitionsBackIOS) && ionic.Platform.isIOS()) {
+	                return angular.extend({}, state.nativeTransitionsBackIOS);
+	            } else if (angular.isObject(state.nativeTransitionsBackAndroid) && ionic.Platform.isAndroid()) {
+	                return angular.extend({}, state.nativeTransitionsBackAndroid);
+	            } else if (angular.isObject(state.nativeTransitionsBackWindowsPhone) && ionic.Platform.isWindowsPhone()) {
+	                return angular.extend({}, state.nativeTransitionsBackWindowsPhone);
+	            } else if (angular.isObject(state.nativeTransitionsBack)) {
+	                return angular.extend({}, state.nativeTransitionsBack);
+	            }
+	            return null;
+	        }
+	
+	        function getStateTransition(state) {
+	            if (angular.isObject(state.nativeTransitionsIOS) && ionic.Platform.isIOS()) {
+	                return angular.extend({}, state.nativeTransitionsIOS);
+	            } else if (angular.isObject(state.nativeTransitionsAndroid) && ionic.Platform.isAndroid()) {
+	                return angular.extend({}, state.nativeTransitionsAndroid);
+	            } else if (angular.isObject(state.nativeTransitionsWindowsPhone) && ionic.Platform.isWindowsPhone()) {
+	                return angular.extend({}, state.nativeTransitionsWindowsPhone);
+	            } else if (angular.isObject(state.nativeTransitions)) {
+	                return angular.extend({}, state.nativeTransitions);
+	            }
+	            return null;
 	        }
 	
 	        function unregisterToStateChangeStartEvent() {
@@ -554,8 +588,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            unregisterToStateChangeStartEvent();
+	            var currentStateTransition = angular.extend({}, $state.current);
+	            var toStateTransition = angular.extend({}, $state.get($ionicHistory.backView().stateName));
 	            $ionicHistory.goBack();
-	            transition('back');
+	            transition('back', currentStateTransition, toStateTransition);
 	        }
 	
 	        function goBackHardware(hasCanceledUi) {
