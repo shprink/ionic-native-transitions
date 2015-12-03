@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc3
+ * @version: v1.0.0-rc4
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -356,7 +356,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
 	                }
 	                $rootScope.$ionicGoBack = goBack;
-	                $ionicPlatform.onHardwareBackButton(goBackHardware);
+	                $ionicPlatform.onHardwareBackButton(function (hasCanceledUi) {
+	                    return goBackHardware(hasCanceledUi);
+	                }, 100);
 	                registerToRouteEvents();
 	            } else {
 	                $log.debug('[native transition] disabling plugin');
