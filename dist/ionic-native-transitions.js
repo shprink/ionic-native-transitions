@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc4
+ * @version: v1.0.0-rc5
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -260,7 +260,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function $get($log, $ionicConfig, $rootScope, $timeout, $state, $location, $ionicHistory, $ionicPlatform) {
 	        'ngInject';
 	
-	        var legacyGoBack = undefined;
+	        var legacyGoBack = undefined,
+	            backButtonUnregister = undefined;
 	
 	        return {
 	            init: init,
@@ -356,9 +357,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
 	                }
 	                $rootScope.$ionicGoBack = goBack;
-	                $ionicPlatform.onHardwareBackButton(function (hasCanceledUi) {
-	                    return goBackHardware(hasCanceledUi);
-	                }, 100);
+	                backButtonUnregister = $ionicPlatform.registerBackButtonAction(goBack, 100);
 	                registerToRouteEvents();
 	            } else {
 	                $log.debug('[native transition] disabling plugin');
@@ -366,7 +365,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    disableIonicTransitions = false;
 	                }
 	                $rootScope.$ionicGoBack = legacyGoBack;
-	                $ionicPlatform.onHardwareBackButton($rootScope.$ionicGoBack);
+	                if (angular.isFunction(backButtonUnregister)) {
+	                    backButtonUnregister.call();
+	                }
 	                unregisterToRouteEvents();
 	            }
 	
@@ -594,12 +595,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var toStateTransition = angular.extend({}, $state.get($ionicHistory.backView().stateName));
 	            $ionicHistory.goBack();
 	            transition('back', currentStateTransition, toStateTransition);
-	        }
-	
-	        function goBackHardware(hasCanceledUi) {
-	            if (!hasCanceledUi) {
-	                goBack();
-	            }
 	        }
 	    }
 	};
