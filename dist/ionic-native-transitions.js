@@ -492,6 +492,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 	                var options = null;
+	                // Abort if event was preventDefault'ed
+	                if (event.defaultPrevented) {
+	                    return;
+	                }
 	                // Disable native transition for this state
 	                if (toState.nativeTransitions === null) {
 	                    return;
