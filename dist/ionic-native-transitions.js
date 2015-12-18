@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc5
+ * @version: v1.0.0-rc6
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -492,6 +492,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 	                var options = null;
+	                // Abort if event was preventDefault'ed
+	                if (event.defaultPrevented) {
+	                    return;
+	                }
 	                // Disable native transition for this state
 	                if (toState.nativeTransitions === null) {
 	                    return;
