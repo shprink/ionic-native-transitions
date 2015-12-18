@@ -1,3 +1,13 @@
+<a name="1.0.0-rc6"></a>
+### 1.0.0-rc6
+
+* [BUGFIX] Screen stuck after $stateChangeStart is defaultPrevented <https://github.com/shprink/ionic-native-transitions/issues/45>
+
+<a name="1.0.0-rc5"></a>
+### 1.0.0-rc5
+
+* [BUGFIX] Correct back button behavior <https://github.com/shprink/ionic-native-transitions/issues/39>
+
 <a name="1.0.0-rc3"></a>
 ### 1.0.0-rc3
 
