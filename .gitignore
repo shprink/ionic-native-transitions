@@ -27,3 +27,6 @@ build/Release
 node_modules
 platforms
 plugins
+
+# Ignore IDE related files
+.idea
