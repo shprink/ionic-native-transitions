@@ -214,9 +214,10 @@ Disable native transition for one state (for instance on tabs)
 ```
 # * @description
 # * Call state go and apply a native transition
-# * @param {string|null}    state              default:null
-# * @param {object}         stateOptions       default:{}
-# * @param {object|null}    transitionOptions  default:null
+# * @param {string|null} state                default:null
+# * @param {object}      stateParams          default:{}
+# * @param {object|null} transitionOptions    default:null
+# * @param {object}      stateOptions         default:{}
 
 $ionicNativeTransitions.stateGo('yourState', {}, {
     "type": "slide",

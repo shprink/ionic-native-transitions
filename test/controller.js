@@ -79,6 +79,8 @@ export default function(
             "type": "slide",
             "direction": "up", // 'left|right|up|down', default 'left' (which is like 'next')
             "duration": 1500, // in milliseconds (ms), default 400
+        }, {
+            reload: true
         });
     }
 
@@ -86,7 +88,7 @@ export default function(
         $ionicNativeTransitions.locationUrl('/three');
     }
 
-    function goBack(count){
+    function goBack(count) {
         console.log('count', count, $ionicHistory.viewHistory())
         $rootScope.$ionicGoBack(count);
     }
