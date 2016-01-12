@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc7
+ * @version: v1.0.0-rc8
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -311,20 +311,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @description
 	         * Call state go and apply a native transition
 	         * @param {string|null} state              default:null
-	         * @param {object}      stateOptions       default:{}
+	         * @param {object}      stateParams        default:{}
 	         * @param {object|null} transitionOptions  default:null
+	         * @param {object}      stateOptions       default:{}
 	         */
 	        function stateGo() {
 	            var state = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-	            var stateOptions = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	            var stateParams = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 	            var transitionOptions = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	            var stateOptions = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
 	
 	            if (!state) {
 	                $log.debug('[native transition] cannot change state without a state...');
 	                return;
 	            }
 	            unregisterToStateChangeStartEvent();
-	            $state.go(state, stateOptions);
+	            $state.go(state, stateParams, stateOptions);
 	            transition(transitionOptions);
 	        }
 	
