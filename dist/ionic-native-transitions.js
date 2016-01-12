@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc6
+ * @version: v1.0.0-rc7
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -590,14 +590,41 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 	
-	        function goBack(e) {
-	            if (!$ionicHistory.backView()) {
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#goBack
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         * @description Navigate back in the current history stack with a back navigation transition
+	         * @param {number} backCount - The number of views to go back to. default will be the previous view
+	         */
+	        function goBack(backCount) {
+	            if (!$ionicHistory.backView() || backCount >= 0) {
 	                return;
 	            }
+	            var stateName = $ionicHistory.backView().stateName;
+	
+	            // Use backCount to find next state only if its defined, else pass as it is to $ionicHistory.goBack
+	            // which defaults to previous view transition
+	            // Get current history stack and find the cursor for the new view
+	            // Based on the new cursor, find the new state to transition to
+	            if (!!backCount && !isNaN(parseInt(backCount))) {
+	                var viewHistory = $ionicHistory.viewHistory();
+	                var currentHistory = viewHistory.histories[$ionicHistory.currentView().historyId];
+	                var newCursor = currentHistory.cursor + backCount;
+	
+	                // If new cursor is more than the max possible or less than zero, default it to first view in history
+	                if (newCursor < 0 || newCursor > currentHistory.stack.length) {
+	                    newCursor = 0;
+	                }
+	
+	                stateName = currentHistory.stack[newCursor].stateName;
+	            }
+	
 	            unregisterToStateChangeStartEvent();
 	            var currentStateTransition = angular.extend({}, $state.current);
-	            var toStateTransition = angular.extend({}, $state.get($ionicHistory.backView().stateName));
-	            $ionicHistory.goBack();
+	            var toStateTransition = angular.extend({}, $state.get(stateName));
+	            $ionicHistory.goBack(backCount);
 	            transition('back', currentStateTransition, toStateTransition);
 	        }
 	    }

@@ -1,3 +1,8 @@
+<a name="1.0.0-rc7"></a>
+### 1.0.0-rc7
+
+* [Enhancement] Adding backCount to goBack(<backCount>) method <https://github.com/shprink/ionic-native-transitions/pull/56>
+
 <a name="1.0.0-rc6"></a>
 ### 1.0.0-rc6
 

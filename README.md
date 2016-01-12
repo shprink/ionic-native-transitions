@@ -247,12 +247,15 @@ $ionicNativeTransitions.locationUrl('/yourUrl', {
 ```
 
 ## History back button
-Using the `<ion-nav-back-button native-back>` directive automatically uses the default back transition
+
+Using the `<ion-nav-back-button>` directive automatically uses the default back transition if you have not added a specific `ng-click` on it.
 
 ## Hadware back button (Android)
+
 The hardware back button on Android uses the default back transition
 
 ## Swipe back (iOS)
+
 For now swipe back will trigger the state native transition (or the default). It does not use the back transition.
 
 You can disable swipe back like this:

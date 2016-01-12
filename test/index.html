@@ -21,7 +21,7 @@
                         </button>
                     </ion-nav-buttons>
                     <ion-nav-buttons side="right">
-                        <button class="button button-clear"  ng-click="main.openModal()">
+                        <button class="button button-clear" ng-click="main.openModal()">
                             <i class="icon ion-open"></i> Modal
                         </button>
                     </ion-nav-buttons>
@@ -98,6 +98,11 @@
                 <ion-content class="">
                     <p>
                         <a class="button button-full button-large icon icon-right ion-chevron-right" ui-sref="four">Four</a>
+                        <a class="button" ng-click="main.goBack()">Go back</a>
+                        <a class="button" ng-click="main.goBack(-1)">Go back 1 states</a>
+                        <a class="button" ng-click="main.goBack(-2)">Go back 2 states</a>
+                        <a class="button" ng-click="main.goBack(-3)">Go back 3 states</a>
+                        <a class="button" ng-click="main.goBack(-10)">Go back 10 states</a>
                     </p>
                 </ion-content>
             </ion-view>
