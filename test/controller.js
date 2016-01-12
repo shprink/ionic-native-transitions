@@ -4,7 +4,8 @@ export default function(
     $log,
     $ionicNativeTransitions,
     $ionicModal,
-    $ionicPlatform
+    $ionicPlatform,
+    $ionicHistory
 ) {
 
     'ngInject';
@@ -18,6 +19,7 @@ export default function(
     vm.locationUrl = locationUrl;
     vm.disableWithoutDisablingIonicTransitions = disableWithoutDisablingIonicTransitions;
     vm.openModal = openModal;
+    vm.goBack = goBack;
 
     $rootScope.$on('ionicNativeTransitions.success', function() {
         $log.info('yeah!');
@@ -82,5 +84,10 @@ export default function(
 
     function locationUrl() {
         $ionicNativeTransitions.locationUrl('/three');
+    }
+
+    function goBack(count){
+        console.log('count', count, $ionicHistory.viewHistory())
+        $rootScope.$ionicGoBack(count);
     }
 }
