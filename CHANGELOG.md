@@ -1,3 +1,8 @@
+<a name="1.0.0-rc8"></a>
+### 1.0.0-rc8
+
+* [Enhancement] stateGo API change <https://github.com/shprink/ionic-native-transitions/issues/35>
+
 <a name="1.0.0-rc7"></a>
 ### 1.0.0-rc7
 
