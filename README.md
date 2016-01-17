@@ -244,7 +244,7 @@ $ionicNativeTransitions.locationUrl('/yourUrl', {
 ## Using directives
 
 ```
-<button native-ui-sref="tabs.home" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'down'}"></button>
+<button native-ui-sref="tabs.home({param1: 'param1', param2: 'param2'})" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'down'}"></button>
 ```
 
 ## History back button

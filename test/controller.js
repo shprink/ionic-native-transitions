@@ -74,7 +74,8 @@ export default function(
 
     function stateGo() {
         $ionicNativeTransitions.stateGo('four', {
-            test: 'buyakacha!'
+            test: 'buyakacha!',
+            testParamUrl: 'hihi'
         }, {
             "type": "slide",
             "direction": "up", // 'left|right|up|down', default 'left' (which is like 'next')
