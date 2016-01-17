@@ -1,3 +1,10 @@
+<a name="1.0.0-rc9"></a>
+### 1.0.0-rc9
+
+* [BUG] stateGo API change <https://github.com/shprink/ionic-native-transitions/issues/35>
+* [BUG] Hardware back does not close app <https://github.com/shprink/ionic-native-transitions/issues/47>
+* [BUG] Pass `backCount` parameter to `$ionicNativeTransitions.goBack()` method <https://github.com/shprink/ionic-native-transitions/issues/53>
+
 <a name="1.0.0-rc8"></a>
 ### 1.0.0-rc8
 

@@ -85,7 +85,7 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
             templateUrl: "templates/three.html"
         })
         .state('four', {
-            url: "/four",
+            url: "/four?testParamUrl",
             params: {
                 test: null
             },

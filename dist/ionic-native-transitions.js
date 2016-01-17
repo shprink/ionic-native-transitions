@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.0-rc8
+ * @version: v1.0.0-rc9
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -359,7 +359,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
 	                }
 	                $rootScope.$ionicGoBack = goBack;
-	                backButtonUnregister = $ionicPlatform.registerBackButtonAction(goBack, 100);
+	                backButtonUnregister = $ionicPlatform.registerBackButtonAction(function (e, count) {
+	                    return goBack(count);
+	                }, 100);
 	                registerToRouteEvents();
 	            } else {
 	                $log.debug('[native transition] disabling plugin');
@@ -601,7 +603,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {number} backCount - The number of views to go back to. default will be the previous view
 	         */
 	        function goBack(backCount) {
-	            if (!$ionicHistory.backView() || backCount >= 0) {
+	
+	            if (!$ionicHistory.backView()) {
+	                // Close the app when no more history
+	                if (navigator.app) {
+	                    navigator.app.exitApp();
+	                }
+	                return;
+	            }
+	            if (backCount >= 0) {
 	                return;
 	            }
 	            var stateName = $ionicHistory.backView().stateName;
@@ -626,6 +636,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            unregisterToStateChangeStartEvent();
 	            var currentStateTransition = angular.extend({}, $state.current);
 	            var toStateTransition = angular.extend({}, $state.get(stateName));
+	            $log.debug('nativepagetransitions goBack', backCount, stateName, currentStateTransition, toStateTransition);
 	            $ionicHistory.goBack(backCount);
 	            transition('back', currentStateTransition, toStateTransition);
 	        }
@@ -651,40 +662,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = ["$log", "$ionicNativeTransitions", "$state", function ($log, $ionicNativeTransitions, $state) {
 	    'ngInject';
 	
-	    link.$inject = ["scope", "element", "attrs"];
+	    controller.$inject = ["$scope", "$element", "$attrs", "$state"];
 	    return {
-	        link: link,
+	        controller: controller,
 	        restrict: 'A',
 	        scope: false
 	    };
 	
-	    function link(scope, element, attrs) {
+	    function controller($scope, $element, $attrs, $state) {
 	        'ngInject';
 	
-	        var state = attrs.nativeUiSref;
-	        var optionsOverride = scope.$eval(attrs.nativeUiSrefOpts) || {};
-	        var options = null;
+	        var stateOptions = $scope.$eval($attrs.nativeUiSrefOpts) || {};
+	        var nativeOptions = null;
 	
-	        attrs.$observe('nativeOptions', function (newOptions) {
-	            var evalOptions = scope.$eval(newOptions);
-	            options = angular.isObject(evalOptions) ? evalOptions : {};
+	        $attrs.$observe('nativeOptions', function (newOptions) {
+	            var evalOptions = $scope.$eval(newOptions);
+	            nativeOptions = angular.isObject(evalOptions) ? evalOptions : {};
 	        });
 	
-	        if (!state) {
-	            return;
-	        }
-	
-	        element.on('click', function (event) {
+	        $element.on('click', function (event) {
+	            var ref = parseStateRef($attrs.nativeUiSref, $state.current.name);
+	            var params = angular.copy($scope.$eval(ref.paramExpr));
 	            if (!$ionicNativeTransitions.isEnabled()) {
-	                $state.go(state, optionsOverride);
+	                $state.go(ref.state, params, stateOptions);
 	                return;
 	            }
 	
-	            $ionicNativeTransitions.stateGo(state, optionsOverride, options);
+	            $ionicNativeTransitions.stateGo(ref.state, params, nativeOptions, stateOptions);
 	        });
 	    }
 	}];
 	
+	function parseStateRef(ref, current) {
+	    var preparsed = ref.match(/^\s*({[^}]*})\s*$/),
+	        parsed;
+	    if (preparsed) ref = current + '(' + preparsed[1] + ')';
+	    parsed = ref.replace(/\n/g, " ").match(/^([^(]+?)\s*(\((.*)\))?$/);
+	    if (!parsed || parsed.length !== 4) throw new Error("Invalid state ref '" + ref + "'");
+	    return {
+	        state: parsed[1],
+	        paramExpr: parsed[3] || null
+	    };
+	}
 	module.exports = exports['default'];
 
 /***/ },
