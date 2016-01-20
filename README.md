@@ -79,7 +79,7 @@ angular.module('yourApp', [
         androiddelay: -1, // same as above but for Android, default -1
         winphonedelay: -1, // same as above but for Windows Phone, default -1,
         fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
-        fixedPixelsBottom: 0 // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
+        fixedPixelsBottom: 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
         triggerTransitionEvent: '$ionicView.afterEnter', // internal ionic-native-transitions option
         backInOppositeDirection: false // Takes over default back transition and state back transition to use the opposite direction transition to go back
     });
