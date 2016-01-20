@@ -8,6 +8,8 @@ Native transitions for Ionic. Turn it on and enjoy native transitions.
 
 # Installation
 ## npm
+
+[![Join the chat at https://gitter.im/shprink/ionic-native-transitions](https://badges.gitter.im/shprink/ionic-native-transitions.svg)](https://gitter.im/shprink/ionic-native-transitions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [https://www.npmjs.com/package/ionic-native-transitions](https://www.npmjs.com/package/ionic-native-transitions)
 
 ```
