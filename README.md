@@ -4,6 +4,8 @@ Native transitions for Ionic. Turn it on and enjoy native transitions.
 
 # Installation
 ## npm
+
+[![Join the chat at https://gitter.im/shprink/ionic-native-transitions](https://badges.gitter.im/shprink/ionic-native-transitions.svg)](https://gitter.im/shprink/ionic-native-transitions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [https://www.npmjs.com/package/ionic-native-transitions](https://www.npmjs.com/package/ionic-native-transitions)
 
 ```
@@ -214,9 +216,10 @@ Disable native transition for one state (for instance on tabs)
 ```
 # * @description
 # * Call state go and apply a native transition
-# * @param {string|null}    state              default:null
-# * @param {object}         stateOptions       default:{}
-# * @param {object|null}    transitionOptions  default:null
+# * @param {string|null} state                default:null
+# * @param {object}      stateParams          default:{}
+# * @param {object|null} transitionOptions    default:null
+# * @param {object}      stateOptions         default:{}
 
 $ionicNativeTransitions.stateGo('yourState', {}, {
     "type": "slide",
@@ -243,16 +246,19 @@ $ionicNativeTransitions.locationUrl('/yourUrl', {
 ## Using directives
 
 ```
-<button native-ui-sref="tabs.home" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'down'}"></button>
+<button native-ui-sref="tabs.home({param1: 'param1', param2: 'param2'})" native-ui-sref-opts="{reload: true}" native-options="{type: 'slide', direction:'down'}"></button>
 ```
 
 ## History back button
-Using the `<ion-nav-back-button native-back>` directive automatically uses the default back transition
+
+Using the `<ion-nav-back-button>` directive automatically uses the default back transition if you have not added a specific `ng-click` on it.
 
 ## Hadware back button (Android)
+
 The hardware back button on Android uses the default back transition
 
 ## Swipe back (iOS)
+
 For now swipe back will trigger the state native transition (or the default). It does not use the back transition.
 
 You can disable swipe back like this:
