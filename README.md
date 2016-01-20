@@ -2,6 +2,10 @@ Native transitions for Ionic. Turn it on and enjoy native transitions.
 
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
 
+## Chat
+
+[![Join the chat at https://gitter.im/shprink/ionic-native-transitions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shprink/ionic-native-transitions)
+
 # Installation
 ## npm
 [https://www.npmjs.com/package/ionic-native-transitions](https://www.npmjs.com/package/ionic-native-transitions)
