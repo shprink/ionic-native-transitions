@@ -245,6 +245,23 @@ $ionicNativeTransitions.locationUrl('/yourUrl', {
 });
 ```
 
+### Next View Options
+
+```
+# * @description
+# * Set options for next view
+# * @param {object} transitionOptions
+
+$ionicNativeTransitions.nextViewOptions({
+    "type": "slide",
+    "direction": "down", // 'left|right|up|down', default 'left' (which is like 'next')
+    "duration": 1500, // in milliseconds (ms), default 400
+    "fixedPixelsTop": 100, // the number of pixels of your fixed header, default 0 (iOS and Android)
+    "fixedPixelsBottom": 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android)
+});
+```
+Use this method before $state.transitionTo or any method for page changing.
+
 ## Using directives
 
 ```
