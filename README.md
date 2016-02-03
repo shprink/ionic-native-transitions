@@ -30,6 +30,12 @@ import 'ionic-native-transitions';
 bower install shprink/ionic-native-transitions
 ```
 
+Then insert the dist file
+
+```
+<script src="./PathToBowerLib/dist/ionic-native-transitions.min.js"></script>
+```
+
 ## Cordova/Ionic
 The recommended version for the Transition plugin is 0.5.5 or higher.
 
