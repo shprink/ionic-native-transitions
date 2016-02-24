@@ -124,6 +124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function () {
 	    'ngInject';
 	
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    var enabled = true,
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
@@ -155,7 +156,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -261,7 +261,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'ngInject';
 	
 	        var legacyGoBack = undefined,
-	            backButtonUnregister = undefined;
+	            backButtonUnregister = undefined,
+	            nextViewOptionsObject = undefined;
 	
 	        return {
 	            init: init,
@@ -412,6 +413,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                options = defaultTransition;
 	            }
 	            options = angular.copy(options);
+	            if (nextViewOptionsObject) {
+	                options = angular.extend({}, options, nextViewOptionsObject);
+	                nextViewOptionsObject = undefined;
+	            }
 	            var type = options.type;
 	            delete options.type;
 	            $log.debug('[native transition]', options);
@@ -639,6 +644,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	            $log.debug('nativepagetransitions goBack', backCount, stateName, currentStateTransition, toStateTransition);
 	            $ionicHistory.goBack(backCount);
 	            transition('back', currentStateTransition, toStateTransition);
+	        }
+	
+	        /**
+	         * @ngdoc function
+	         * @name ionic-native-transitions.$ionicNativeTransitions#nextViewOptions
+	         * @access public
+	         * @methodOf ionic-native-transitions.$ionicNativeTransitions
+	         *
+	         * @description
+	         * Set options for next view transition
+	         * @param {object} options - transition options
+	         */
+	        function nextViewOptions(options) {
+	            nextViewOptionsObject = options;
 	        }
 	    }
 	};
