@@ -37,14 +37,14 @@ Then insert the dist file
 ```
 
 ## Cordova/Ionic
-The recommended version for the Transition plugin is 0.5.5 or higher.
+The recommended version for the Transition plugin is 0.6.2 or higher.
 
 ```
 # Using Cordova
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.5
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.2
 
 # Using Ionic CLI
-ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.5.5
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.2
 ```
 
 ### iOS
