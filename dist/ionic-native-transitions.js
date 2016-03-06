@@ -124,11 +124,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function () {
 	    'ngInject';
 	
-	    var enabled = true,
-	        $stateChangeStart = null,
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
+	    var $stateChangeStart = null,
 	        $stateChangeSuccess = null,
 	        $stateChangeError = null,
 	        $stateAfterEnter = null,
+	        prevState = null,
 	        oppositeDirections = {
 	        up: 'down',
 	        down: 'up',
@@ -155,7 +156,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -325,6 +325,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $log.debug('[native transition] cannot change state without a state...');
 	                return;
 	            }
+	
+	            if (state === prevState) {
+	                $log.debug('[native transition] prevent same state transition');
+	                return;
+	            }
+	
+	            prevState = state;
+	
 	            unregisterToStateChangeStartEvent();
 	            $state.go(state, stateParams, stateOptions);
 	            transition(transitionOptions);
@@ -587,7 +595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        function init() {
 	            legacyGoBack = $rootScope.$ionicGoBack;
 	            if (!isEnabled()) {
-	                $log.debug('nativepagetransitions is disabled or nativepagetransitions plugin is not present');
+	                $log.debug('[native transition] The plugin is either disabled or nativepagetransitions plugin by telerik is not present. If you are getting this message in a browser, this is normal behavior, native transitions only work on device.');
 	                return;
 	            } else {
 	                enableFromService();
