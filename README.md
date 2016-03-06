@@ -281,6 +281,10 @@ $ionicConfigProvider.views.swipeBackEnabled(false);
 You can listen to success or error events
 
 ```js
+$rootScope.$on('ionicNativeTransitions.beforeTransition', function(){
+    // Transition is about to happen
+});
+
 $rootScope.$on('ionicNativeTransitions.success', function(){
     // Transition success
 });
