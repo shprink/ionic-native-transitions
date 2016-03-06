@@ -16,6 +16,7 @@ export default function(
     vm.enable = enable;
     vm.disable = disable;
     vm.stateGo = stateGo;
+    vm.sameStateGo = sameStateGo;
     vm.locationUrl = locationUrl;
     vm.disableWithoutDisablingIonicTransitions = disableWithoutDisablingIonicTransitions;
     vm.openModal = openModal;
@@ -27,6 +28,10 @@ export default function(
 
     $rootScope.$on('ionicNativeTransitions.error', function() {
         $log.info(':(');
+    });
+
+    $rootScope.$on('ionicNativeTransitions.beforeTransition', function(){
+        $log.info('Transition is about to happen');
     });
 
     function openModal() {
@@ -70,6 +75,10 @@ export default function(
     function disableWithoutDisablingIonicTransitions() {
         $ionicNativeTransitions.enable(false, true);
         vm.isEnable = $ionicNativeTransitions.isEnabled();
+    }
+
+    function sameStateGo() {
+        $ionicNativeTransitions.stateGo('tabs.home');
     }
 
     function stateGo() {
