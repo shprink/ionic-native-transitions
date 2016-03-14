@@ -276,7 +276,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent,
 	            locationUrl: locationUrl,
 	            stateGo: stateGo,
-	            goBack: goBack
+	            goBack: goBack,
+	            nextViewOptions: nextViewOptions
 	        };
 	
 	        /**
@@ -741,15 +742,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	  value: true
+	    value: true
 	});
 	
 	exports['default'] = ["$ionicNativeTransitions", "$ionicPlatform", "$ionicHistory", "$rootScope", function ($ionicNativeTransitions, $ionicPlatform, $ionicHistory, $rootScope) {
-	  'ngInject';
+	    'ngInject';
 	
-	  $ionicPlatform.ready(function () {
-	    $ionicNativeTransitions.init();
-	  });
+	    $ionicPlatform.ready(function () {
+	        $ionicNativeTransitions.init();
+	    });
 	}];
 	
 	;
