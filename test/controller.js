@@ -21,6 +21,7 @@ export default function(
     vm.disableWithoutDisablingIonicTransitions = disableWithoutDisablingIonicTransitions;
     vm.openModal = openModal;
     vm.goBack = goBack;
+    vm.stateError = stateError;
 
     $rootScope.$on('ionicNativeTransitions.success', function() {
         $log.info('yeah!');
@@ -101,5 +102,9 @@ export default function(
     function goBack(count) {
         console.log('count', count, $ionicHistory.viewHistory())
         $rootScope.$ionicGoBack(count);
+    }
+    
+    function stateError() {
+          $ionicNativeTransitions.stateGo('five');
     }
 }

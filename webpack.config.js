@@ -34,5 +34,8 @@ module.exports = {
         filename: 'index.html',
         pkg: pkg,
         template: path.join(testPath, 'index.html')
-    })]
+    })],
+    node: {
+        fs: "empty"
+    }
 };

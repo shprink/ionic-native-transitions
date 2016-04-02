@@ -95,6 +95,29 @@ export default function($ionicNativeTransitionsProvider, $stateProvider, $urlRou
                 console.log('$stateParams', $stateParams);
             }
         })
+        .state('five', {
+            url: "/five",
+            templateUrl: "templates/five.html",
+            controller: function($stateParams){
+                'ngInject';
+                console.log('$stateParams', $stateParams);
+            },
+            resolve: function($timeout, $q, $ionicPopup) {
+                'ngInject';
+                var deferred = $q.defer(); 
+                $timeout(function() {
+                    $ionicPopup.show({
+                        template: '',
+                        title: 'A popup',
+                        buttons: [
+                        { text: 'Cancel' }
+                    ]
+                    });
+                    deferred.reject();
+                }, 1000)
+                return deferred.promise;
+            }
+        })
         .state('tabs.about', {
             url: "/about",
             nativeTransitions: null,
