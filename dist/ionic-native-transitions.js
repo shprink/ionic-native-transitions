@@ -495,11 +495,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        function disablePendingTransition() {
 	            // If native transition support cancelling transition (> 0.6.4), cancel pending transition
 	            if (angular.isFunction(window.plugins.nativepagetransitions.cancelPendingTransition)) {
-	                $log.debug('cancelPendingTransition');
 	                window.plugins.nativepagetransitions.cancelPendingTransition();
 	                registerToStateChangeStartEvent();
 	            } else {
-	                $log.debug('executePendingTransition');
 	                executePendingTransition();
 	            }
 	        }
