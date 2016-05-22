@@ -341,8 +341,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                $state.go(state, stateParams, stateOptions);
 	            }
-	
-	            return statePromise;
 	        }
 	
 	        /**
