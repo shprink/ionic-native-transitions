@@ -124,7 +124,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function () {
 	    'ngInject';
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    var enabled = true,
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
@@ -156,6 +155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
 	    };
 	
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -273,7 +273,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            unregisterToRouteEvents: unregisterToRouteEvents,
 	            registerToStateChangeStartEvent: registerToStateChangeStartEvent,
 	            unregisterToStateChangeStartEvent: unregisterToStateChangeStartEvent,
-	            disablePendingTransition: disablePendingTransition,
 	            locationUrl: locationUrl,
 	            stateGo: stateGo,
 	            goBack: goBack
@@ -299,10 +298,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            unregisterToStateChangeStartEvent();
-	            var locationPromise = $location.url(url);
+	            $location.url(url);
 	            transition(transitionOptions);
-	
-	            return locationPromise;
 	        }
 	
 	        /**
@@ -333,14 +330,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            unregisterToStateChangeStartEvent();
+	            $state.go(state, stateParams, stateOptions);
 	            transition(transitionOptions);
-	            if (ionic.Platform.isIOS()) {
-	                $timeout(function () {
-	                    $state.go(state, stateParams, stateOptions);
-	                });
-	            } else {
-	                $state.go(state, stateParams, stateOptions);
-	            }
 	        }
 	
 	        /**
@@ -496,21 +487,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            registerToStateChangeStartEvent();
 	        }
 	
-	        function disablePendingTransition() {
-	            // If native transition support cancelling transition (> 0.6.4), cancel pending transition
-	            if (window.plugins && window.plugins.nativepagetransitions && angular.isFunction(window.plugins.nativepagetransitions.cancelPendingTransition)) {
-	                window.plugins.nativepagetransitions.cancelPendingTransition();
-	                registerToStateChangeStartEvent();
-	            } else {
-	                executePendingTransition();
-	            }
-	        }
-	
 	        function registerToRouteEvents() {
 	            unregisterToRouteEvents();
 	            registerToStateChangeStartEvent();
 	            // $stateChangeSuccess = $rootScope.$on('$stateChangeSuccess', executePendingTransition);
-	            $stateChangeError = $rootScope.$on('$stateChangeError', disablePendingTransition);
+	            $stateChangeError = $rootScope.$on('$stateChangeError', executePendingTransition);
 	            $stateAfterEnter = $rootScope.$on(getDefaultOptions().triggerTransitionEvent, executePendingTransition);
 	        }
 	
@@ -661,14 +642,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var currentStateTransition = angular.extend({}, $state.current);
 	            var toStateTransition = angular.extend({}, $state.get(stateName));
 	            $log.debug('nativepagetransitions goBack', backCount, stateName, currentStateTransition, toStateTransition);
+	            $ionicHistory.goBack(backCount);
 	            transition('back', currentStateTransition, toStateTransition);
-	            if (ionic.Platform.isIOS()) {
-	                $timeout(function () {
-	                    $ionicHistory.goBack(backCount);
-	                });
-	            } else {
-	                $ionicHistory.goBack(backCount);
-	            }
 	        }
 	    }
 	};
