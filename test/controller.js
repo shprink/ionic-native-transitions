@@ -19,6 +19,7 @@ export default function(
     vm.sameStateGo = sameStateGo;
     vm.locationUrl = locationUrl;
     vm.disableWithoutDisablingIonicTransitions = disableWithoutDisablingIonicTransitions;
+    vm.enableBothTransitions = enableBothTransitions;
     vm.openModal = openModal;
     vm.goBack = goBack;
     vm.stateError = stateError;
@@ -75,6 +76,11 @@ export default function(
 
     function disableWithoutDisablingIonicTransitions() {
         $ionicNativeTransitions.enable(false, true);
+        vm.isEnable = $ionicNativeTransitions.isEnabled();
+    }
+
+    function enableBothTransitions() {
+        $ionicNativeTransitions.enable(true, false);
         vm.isEnable = $ionicNativeTransitions.isEnabled();
     }
 

@@ -37,14 +37,14 @@ Then insert the dist file
 ```
 
 ## Cordova/Ionic
-The recommended version for the Transition plugin is 0.6.2 or higher.
+The recommended version for the Transition plugin is 0.6.5 or higher.
 
 ```
 # Using Cordova
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.2
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5
 
 # Using Ionic CLI
-ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.2
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5
 ```
 
 ### iOS
@@ -341,6 +341,34 @@ $rootScope.$on('ionicNativeTransitions.error', function(){
     "type"          : "curl",
     "direction"     : "up", // 'up|down', default 'up'
 }
+```
+
+# FAQ
+
+## What's the best way to animate tabs?
+
+Use fade transition
+
+```js
+.state('tabs.contact', {
+    url: "/contact",
+    nativeTransitions: {
+        type: "fade"
+    }
+})
+```
+
+if you to use slide, use it with the `fixedPixelsTop` option. 
+
+```js
+.state('tabs.contact', {
+    url: "/contact",
+    nativeTransitions: {
+        type: "slide",
+        direction: "left",
+        fixedPixelsTop: 93
+    }
+})
 ```
 
 # Contribute
