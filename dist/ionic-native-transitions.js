@@ -124,6 +124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function () {
 	    'ngInject';
 	
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    var enabled = true,
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
@@ -152,10 +153,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fixedPixelsTop: 0, // the number of pixels of your fixed header, default 0 (iOS and Android)
 	        fixedPixelsBottom: 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android),
 	        triggerTransitionEvent: '$ionicView.afterEnter', // internal ionic-native-transitions option
-	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
+	        backInOppositeDirection: false, // Disable default back transition and uses the opposite transition to go back
+	        hasAlreadyRegisterBackButtonAction: false // if you have already registered an action on registerBackButtonAction
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -368,9 +369,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
 	                }
 	                $rootScope.$ionicGoBack = goBack;
-	                backButtonUnregister = $ionicPlatform.registerBackButtonAction(function (e, count) {
-	                    return goBack(count);
-	                }, 100);
+	                if (!getDefaultOptions().hasAlreadyRegisterBackButtonAction) {
+	                    backButtonUnregister = $ionicPlatform.registerBackButtonAction(function (e, count) {
+	                        return goBack(count);
+	                    }, 100);
+	                }
 	                registerToRouteEvents();
 	            } else {
 	                $log.debug('[native transition] disabling plugin');
