@@ -124,6 +124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function () {
 	    'ngInject';
 	
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    var enabled = true,
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
@@ -155,7 +156,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -328,7 +328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $log.debug('[native transition] cannot change state without a state...');
 	                return;
 	            }
-	            if ($state.current.name === state) {
+	            if ($state.is(state, stateParams)) {
 	                $log.debug('[native transition] same state transition are not possible');
 	                return;
 	            }
