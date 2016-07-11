@@ -1,4 +1,4 @@
-export default function(
+export default function (
     $scope,
     $rootScope,
     $log,
@@ -24,15 +24,23 @@ export default function(
     vm.goBack = goBack;
     vm.stateError = stateError;
 
-    $rootScope.$on('ionicNativeTransitions.success', function() {
+    $scope.$on('$ionicView.loaded', function (event, data) {
+        console.log('$ionicView.loaded');
+    });
+
+    $scope.$on('$ionicView.enter', function (event, data) {
+        console.log('$ionicView.enter');
+    });
+
+    $rootScope.$on('ionicNativeTransitions.success', function () {
         $log.info('yeah!');
     });
 
-    $rootScope.$on('ionicNativeTransitions.error', function() {
+    $rootScope.$on('ionicNativeTransitions.error', function () {
         $log.info(':(');
     });
 
-    $rootScope.$on('ionicNativeTransitions.beforeTransition', function(){
+    $rootScope.$on('ionicNativeTransitions.beforeTransition', function () {
         $log.info('Transition is about to happen');
     });
 
@@ -54,8 +62,8 @@ export default function(
                 </ion-content>
             </ion-modal-view>
             `, {
-            scope: $rootScope.$new(),
-        });
+                scope: $rootScope.$new(),
+            });
         vm.modal.show();
         vm.modal.scope.close = () => {
             console.log('modal close', JSON.stringify($ionicPlatform.$backButtonActions))
@@ -84,8 +92,8 @@ export default function(
         vm.isEnable = $ionicNativeTransitions.isEnabled();
     }
 
-    function sameStateGo() {
-        $ionicNativeTransitions.stateGo('tabs.home');
+    function sameStateGo(reload = false) {
+        $ionicNativeTransitions.stateGo('tabs.home', {}, { reload });
     }
 
     function stateGo() {
@@ -93,12 +101,12 @@ export default function(
             test: 'buyakacha!',
             testParamUrl: 'hihi'
         }, {
-            "type": "slide",
-            "direction": "up", // 'left|right|up|down', default 'left' (which is like 'next')
-            "duration": 1500, // in milliseconds (ms), default 400
-        }, {
-            reload: true
-        });
+                "type": "slide",
+                "direction": "up", // 'left|right|up|down', default 'left' (which is like 'next')
+                "duration": 1500, // in milliseconds (ms), default 400
+            }, {
+                reload: true
+            });
     }
 
     function locationUrl() {
@@ -109,8 +117,8 @@ export default function(
         console.log('count', count, $ionicHistory.viewHistory())
         $rootScope.$ionicGoBack(count);
     }
-    
+
     function stateError() {
-          $ionicNativeTransitions.stateGo('five');
+        $ionicNativeTransitions.stateGo('five');
     }
 }

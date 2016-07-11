@@ -382,7 +382,7 @@ npm install
 npm run watch
 
 # in the other terminal run following to build the test page and the doc
-npm run devserver
+npm start
 ```
 
 Open `http://localhost:8080`
