@@ -1,3 +1,31 @@
+<a name="1.0.0"></a>
+### 1.0.0
+
+* [BUG] Default back transition takes over the state transition <https://github.com/shprink/ionic-native-transitions/issues/105>
+* [BUG] Same state transition with reload flag not possible <https://github.com/shprink/ionic-native-transitions/issues/119>
+
+#### Breaking changes
+
+* `stateGo` arguments order changed to match UI Route `go` arguments:
+
+from:
+
+```
+# * @param {string|null} state                default:null
+# * @param {object}      stateParams          default:{}
+# * @param {object|null} transitionOptions    default:null
+# * @param {object}      stateOptions         default:{}
+```
+
+to:
+
+```
+# * @param {string|null} state                default:null
+# * @param {object}      stateParams          default:{}
+# * @param {object}      stateOptions         default:{}
+# * @param {object|null} transitionOptions    default:null
+```
+
 <a name="1.0.0-rc11"></a>
 ### 1.0.0-rc11
 
