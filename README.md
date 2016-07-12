@@ -37,14 +37,14 @@ Then insert the dist file
 ```
 
 ## Cordova/Ionic
-The recommended version for the Transition plugin is 0.6.2 or higher.
+The recommended version for the Transition plugin is 0.6.5 or higher.
 
 ```
 # Using Cordova
-cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.2
+cordova plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5
 
 # Using Ionic CLI
-ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.2
+ionic plugin add https://github.com/Telerik-Verified-Plugins/NativePageTransitions#0.6.5
 ```
 
 ### iOS
@@ -226,8 +226,8 @@ Disable native transition for one state (for instance on tabs)
 # * Call state go and apply a native transition
 # * @param {string|null} state                default:null
 # * @param {object}      stateParams          default:{}
-# * @param {object|null} transitionOptions    default:null
 # * @param {object}      stateOptions         default:{}
+# * @param {object|null} transitionOptions    default:null
 
 $ionicNativeTransitions.stateGo('yourState', {}, {
     "type": "slide",
@@ -343,6 +343,34 @@ $rootScope.$on('ionicNativeTransitions.error', function(){
 }
 ```
 
+# FAQ
+
+## What's the best way to animate tabs?
+
+Use fade transition
+
+```js
+.state('tabs.contact', {
+    url: "/contact",
+    nativeTransitions: {
+        type: "fade"
+    }
+})
+```
+
+if you to use slide, use it with the `fixedPixelsTop` option. 
+
+```js
+.state('tabs.contact', {
+    url: "/contact",
+    nativeTransitions: {
+        type: "slide",
+        direction: "left",
+        fixedPixelsTop: 93
+    }
+})
+```
+
 # Contribute
 ## Development
 
@@ -354,7 +382,7 @@ npm install
 npm run watch
 
 # in the other terminal run following to build the test page and the doc
-npm run devserver
+npm start
 ```
 
 Open `http://localhost:8080`
