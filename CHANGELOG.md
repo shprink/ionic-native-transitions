@@ -1,3 +1,8 @@
+<a name="1.0.1"></a>
+### 1.0.1
+
+* [BUG] Transition direction is wrong when using native-ui-sref <https://github.com/shprink/ionic-native-transitions/issues123>
+
 <a name="1.0.0"></a>
 ### 1.0.0
 
