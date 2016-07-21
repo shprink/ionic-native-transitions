@@ -154,7 +154,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fixedPixelsBottom: 0, // the number of pixels of your fixed footer (f.i. a tab bar), default 0 (iOS and Android),
 	        triggerTransitionEvent: '$ionicView.afterEnter', // internal ionic-native-transitions option
 	        backInOppositeDirection: false, // Disable default back transition and uses the opposite transition to go back
-	        hasAlreadyRegisterBackButtonAction: false // if you have already registered an action on registerBackButtonAction
+	        hasAlreadyRegisterBackButtonAction: false, // if you have already registered an action on registerBackButtonAction,
+	        useNativeTransitionForGoBack: true // If you want to have native transition on history goBack
 	    };
 	
 	    return {
@@ -368,7 +369,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (window.plugins && window.plugins.nativepagetransitions) {
 	                    angular.extend(window.plugins.nativepagetransitions.globalOptions, getDefaultOptions());
 	                }
-	                $rootScope.$ionicGoBack = goBack;
+	
+	                if (getDefaultOptions().useNativeTransitionForGoBack) {
+	                    $rootScope.$ionicGoBack = goBack;
+	                }
 	                if (!getDefaultOptions().hasAlreadyRegisterBackButtonAction) {
 	                    backButtonUnregister = $ionicPlatform.registerBackButtonAction(function (e, count) {
 	                        return goBack(count);
