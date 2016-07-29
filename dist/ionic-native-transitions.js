@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.1
+ * @version: v1.0.2
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -328,10 +328,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $log.debug('[native transition] cannot change state without a state...');
 	                return;
 	            }
-	            if ($state.current.name === state && !stateOptions.reload) {
+	
+	            if ($state.is(state, stateParams) && !stateOptions.reload) {
 	                $log.debug('[native transition] same state transition are not possible');
 	                return;
 	            }
+	
 	            unregisterToStateChangeStartEvent();
 	            transition(transitionOptions);
 	            return $timeout(function () {

@@ -1,3 +1,8 @@
+<a name="1.0.2"></a>
+### 1.0.2
+
+* [BUG] Allow transitions to same state with different parameters <https://github.com/shprink/ionic-native-transitions/pull/126>
+
 <a name="1.0.1"></a>
 ### 1.0.1
 
