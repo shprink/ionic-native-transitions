@@ -261,7 +261,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        'ngInject';
 	
 	        var legacyGoBack = undefined,
-	            backButtonUnregister = undefined;
+	            backButtonUnregister = undefined,
+	            transitioning = undefined;
 	
 	        return {
 	            init: init,
@@ -517,10 +518,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if ($stateChangeStart) {
 	                return;
 	            }
-	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, stateOptions) {
 	                var options = null;
 	                // Abort if event was preventDefault'ed
 	                if (event.defaultPrevented) {
+	                    return;
+	                }
+	                if (transitioning) {
+	                    transitioning = false;
 	                    return;
 	                }
 	                // Disable native transition for this state
@@ -530,7 +535,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                options = getStateTransition(toState);
 	                $log.debug('[native transition] $stateChangeStart', toState, options);
-	                transition(options);
+	
+	                transition(options).then(function () {
+	                    transitioning = true;
+	                    return $state.go(toState, toParams, stateOptions);
+	                });
+	
+	                // For now, we will interrupt the transition
+	                // We'll call $state.go after transition
+	                event.preventDefault();
 	            });
 	        }
 	
