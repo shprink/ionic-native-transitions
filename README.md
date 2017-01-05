@@ -1,6 +1,9 @@
-Native transitions for Ionic. Turn it on and enjoy native transitions.
+Native transitions for Ionic v1. Turn it on and enjoy native transitions!
 
 ![gif](http://examples.julienrenaux.fr/native-transitions/native-transitions.gif)
+
+**Please note that this project is now in maintenance mode.** We welcome PRs for bug fixes, but encourage you to use Ionic 2 and [Ionic Native](https://ionicframework.com/docs/v2/native/nativepagetransitions/) for all future development.
+
 
 ## Chat
 
