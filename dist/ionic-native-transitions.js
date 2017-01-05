@@ -2,7 +2,7 @@
  * ionic-native-transitions
  *  ---
  * Native transitions for Ionic applications
- * @version: v1.0.2
+ * @version: v1.0.3
  * @author: shprink <contact@julienrenaux.fr>
  * @link: https://github.com/shprink/ionic-native-transitions
  * @license: MIT
@@ -770,15 +770,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	    value: true
+	  value: true
 	});
 	
 	exports['default'] = ["$ionicNativeTransitions", "$ionicPlatform", "$ionicHistory", "$rootScope", function ($ionicNativeTransitions, $ionicPlatform, $ionicHistory, $rootScope) {
-	    'ngInject';
+	  'ngInject';
 	
-	    $ionicPlatform.ready(function () {
-	        $ionicNativeTransitions.init();
-	    });
+	  $ionicPlatform.ready(function () {
+	    $ionicNativeTransitions.init();
+	  });
 	}];
 	
 	;
