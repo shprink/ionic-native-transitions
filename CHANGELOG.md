@@ -1,3 +1,8 @@
+<a name="1.0.3"></a>
+### 1.0.3
+
+* [BUG] Fixing overlapping/flickering of current view when navigating <https://github.com/shprink/ionic-native-transitions/pull/137>
+
 <a name="1.0.2"></a>
 ### 1.0.2
 
