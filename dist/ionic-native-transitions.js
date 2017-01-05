@@ -124,6 +124,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports['default'] = function () {
 	    'ngInject';
 	
+	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform", "$q"];
 	    var enabled = true,
 	        $stateChangeStart = null,
 	        $stateChangeSuccess = null,
@@ -155,7 +156,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        backInOppositeDirection: false // Disable default back transition and uses the opposite transition to go back
 	    };
 	
-	    $get.$inject = ["$log", "$ionicConfig", "$rootScope", "$timeout", "$state", "$location", "$ionicHistory", "$ionicPlatform"];
 	    return {
 	        $get: $get,
 	        enable: enable,
@@ -257,11 +257,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this;
 	    }
 	
-	    function $get($log, $ionicConfig, $rootScope, $timeout, $state, $location, $ionicHistory, $ionicPlatform) {
+	    function $get($log, $ionicConfig, $rootScope, $timeout, $state, $location, $ionicHistory, $ionicPlatform, $q) {
 	        'ngInject';
 	
 	        var legacyGoBack = undefined,
-	            backButtonUnregister = undefined;
+	            backButtonUnregister = undefined,
+	            transitioning = undefined;
 	
 	        return {
 	            init: init,
@@ -299,10 +300,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 	            unregisterToStateChangeStartEvent();
-	            var locationPromise = $location.url(url);
-	            transition(transitionOptions);
 	
-	            return locationPromise;
+	            return transition(transitionOptions).then(function () {
+	                return $location.url(url);
+	            });
 	        }
 	
 	        /**
@@ -335,9 +336,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	
 	            unregisterToStateChangeStartEvent();
-	            transition(transitionOptions);
-	            return $timeout(function () {
-	                return $state.go(state, stateParams, stateOptions);
+	            return transition(transitionOptions).then(function () {
+	                return $timeout(function () {
+	                    return $state.go(state, stateParams, stateOptions);
+	                });
 	            });
 	        }
 	
@@ -398,8 +400,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	
 	        function transition() {
+	            var defer = $q.defer();
 	            if (!isEnabled()) {
-	                return;
+	                return $q.when();
 	            }
 	            var options = {};
 	            if (angular.isObject(arguments[0])) {
@@ -433,7 +436,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var type = options.type;
 	            delete options.type;
 	            $rootScope.$broadcast('ionicNativeTransitions.beforeTransition');
-	            window.plugins.nativepagetransitions[type](options, transitionSuccess.bind(this, getTransitionDuration(options)), transitionError.bind(this, getTransitionDuration(options)));
+	
+	            var me = this;
+	            window.plugins.nativepagetransitions[type](options, function () {
+	                transitionSuccess.bind(me, getTransitionDuration(options))();
+	                defer.resolve();
+	            }, function () {
+	                transitionError.bind(me, getTransitionDuration(options))();
+	                defer.reject();
+	            });
+	
+	            return defer.promise;
 	        }
 	
 	        function transitionSuccess(duration) {
@@ -505,10 +518,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if ($stateChangeStart) {
 	                return;
 	            }
-	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+	            $stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, stateOptions) {
 	                var options = null;
 	                // Abort if event was preventDefault'ed
 	                if (event.defaultPrevented) {
+	                    return;
+	                }
+	                if (transitioning) {
+	                    transitioning = false;
 	                    return;
 	                }
 	                // Disable native transition for this state
@@ -518,7 +535,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	                options = getStateTransition(toState);
 	                $log.debug('[native transition] $stateChangeStart', toState, options);
-	                transition(options);
+	
+	                transition(options).then(function () {
+	                    transitioning = true;
+	                    return $state.go(toState, toParams, stateOptions);
+	                });
+	
+	                // For now, we will interrupt the transition
+	                // We'll call $state.go after transition
+	                event.preventDefault();
 	            });
 	        }
 	
@@ -657,9 +682,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 	            }
 	            $log.debug('nativepagetransitions goBack', backCount, stateName, currentStateTransition, toStateTransition);
-	            transition('back', currentStateTransition, toStateTransition);
-	            return $timeout(function () {
-	                return $ionicHistory.goBack(backCount);
+	            return transition('back', currentStateTransition, toStateTransition).then(function () {
+	                return $timeout(function () {
+	                    return $ionicHistory.goBack(backCount);
+	                });
 	            });
 	        }
 	    }
@@ -744,15 +770,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	  value: true
+	    value: true
 	});
 	
 	exports['default'] = ["$ionicNativeTransitions", "$ionicPlatform", "$ionicHistory", "$rootScope", function ($ionicNativeTransitions, $ionicPlatform, $ionicHistory, $rootScope) {
-	  'ngInject';
+	    'ngInject';
 	
-	  $ionicPlatform.ready(function () {
-	    $ionicNativeTransitions.init();
-	  });
+	    $ionicPlatform.ready(function () {
+	        $ionicNativeTransitions.init();
+	    });
 	}];
 	
 	;
